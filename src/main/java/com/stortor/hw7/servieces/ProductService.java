@@ -40,14 +40,6 @@ public class ProductService {
         product.setCost(product.getCost() + delta);
     }
 
-    public List <Product> filterByMin(Integer min) {
-        return productRepository.findProductByCostAfter(min);
-    }
-
-    public List<Product> filterByMax(Integer max) {
-        return productRepository.findProductByCostBefore(max);
-    }
-
     public List<Product> filterCostBetween(Integer min, Integer max) {
         return productRepository.findAllByCostBetween(min, max);
     }

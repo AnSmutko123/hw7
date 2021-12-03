@@ -41,18 +41,8 @@ public class ProductController {
         productService.changeCost(productId, delta);
     }
 
-    @GetMapping("/products/min")
-    public List<Product> filterByMinCost(@RequestParam(defaultValue = "0") Integer min) {
-        return productService.filterByMin(min);
-    }
-
-    @GetMapping("/products/max")
-    public List<Product> filterByMaxCost(@RequestParam(defaultValue = "100") Integer max) {
-        return productService.filterByMax(max);
-    }
-
     @GetMapping("/products/between_cost")
-    public List<Product> filterCostBetween(@RequestParam Integer min, @RequestParam Integer max) {
+    public List<Product> filterCostBetween(@RequestParam(required = false, defaultValue = "0") Integer min, @RequestParam(required = false, defaultValue = "100000") Integer max) {
         return productService.filterCostBetween(min, max);
     }
 

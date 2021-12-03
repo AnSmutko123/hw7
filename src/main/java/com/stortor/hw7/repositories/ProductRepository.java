@@ -9,8 +9,6 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    public List <Product> findProductByCostAfter(Integer min);
-    public List <Product> findProductByCostBefore(Integer max);
     public List <Product> findAllByCostBetween(Integer min, Integer max);
 
 }
