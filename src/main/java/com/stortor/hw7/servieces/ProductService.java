@@ -40,24 +40,12 @@ public class ProductService {
         product.setCost(product.getCost() + delta);
     }
 
-    // Хочется узнать как обрабатывать пустой лист, в случае если он вернется в таком методе
-    // Вот то что я придумала, но интересно узнать как правильно
     public List <Product> filterByMin(Integer min) {
-        List<Product> products = productRepository.findProductByCostAfter(min);
-        if (products.isEmpty()) {
-            throw new ResourceNotFoundException(String.format("Products more than %d not found", min));
-        } else {
-            return products;
-        }
+        return productRepository.findProductByCostAfter(min);
     }
 
     public List<Product> filterByMax(Integer max) {
-        List<Product> products = productRepository.findProductByCostBefore(max);
-        if (products.isEmpty()) {
-            throw new ResourceNotFoundException(String.format("Products less than %d not found", max));
-        } else {
-            return products;
-        }
+        return productRepository.findProductByCostBefore(max);
     }
 
     public List<Product> filterCostBetween(Integer min, Integer max) {
