@@ -41,6 +41,12 @@ public class ProductController {
         productService.changeCost(productId, delta);
     }
 
+    @GetMapping("/products/change_page")
+    public List<Product> changePage(@RequestParam(defaultValue = "1") Long min, @RequestParam(defaultValue = "10") Long max) {
+        return productService.changePage(min, max);
+    }
+
+
     @GetMapping("/products/between_cost")
     public List<Product> filterCostBetween(@RequestParam(required = false, defaultValue = "0") Integer min, @RequestParam(required = false, defaultValue = "100000") Integer max) {
         return productService.filterCostBetween(min, max);
