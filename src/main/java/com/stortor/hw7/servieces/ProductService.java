@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
 public class ProductService {
 
@@ -20,6 +21,10 @@ public class ProductService {
 
     public List<Product> findAll() {
         return productRepository.findAll();
+    }
+
+    public List<Product> changePage(Long min, Long max) {
+        return productRepository.findAllByIdBetween(min, max);
     }
 
     public void deleteProductById(Long id) {
@@ -43,4 +48,5 @@ public class ProductService {
     public List<Product> filterCostBetween(Integer min, Integer max) {
         return productRepository.findAllByCostBetween(min, max);
     }
+
 }

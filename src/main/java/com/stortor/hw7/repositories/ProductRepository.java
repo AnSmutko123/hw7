@@ -10,5 +10,6 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     public List <Product> findAllByCostBetween(Integer min, Integer max);
+    public List <Product> findAllByIdBetween(Long min, Long max);
 
 }
