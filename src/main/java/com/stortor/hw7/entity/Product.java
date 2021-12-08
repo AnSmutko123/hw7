@@ -1,5 +1,7 @@
 package com.stortor.hw7.entity;
 
+import com.stortor.hw7.dto.ProductDto;
+
 import javax.persistence.*;
 
 @Entity
@@ -25,6 +27,14 @@ public class Product {
         this.title = title;
         this.cost = cost;
     }
+
+    public Product(ProductDto productDto) {
+        this.id = productDto.getId();
+        this.title = productDto.getTitle();
+        this.cost = productDto.getCost();
+    }
+
+
 
     public Long getId() {
         return id;

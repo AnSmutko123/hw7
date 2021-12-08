@@ -1,12 +1,13 @@
 package com.stortor.hw7.controllers;
 
+import com.stortor.hw7.dto.ProductDto;
 import com.stortor.hw7.entity.Product;
 import com.stortor.hw7.exceptions.ResourceNotFoundException;
 import com.stortor.hw7.servieces.ProductService;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@RequestMapping("/api/v1/products")
 @RestController
 public class ProductController {
 
@@ -16,40 +17,46 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/products")
-    public List<Product> getAllProducts() {
-        return productService.findAll();
+    @GetMapping()
+    public Page<ProductDto> getAllProducts(
+            @RequestParam(name = "p", defaultValue = "1") Integer page,
+            @RequestParam(name = "max_cost", required = false) Integer maxCost,
+            @RequestParam(name = "min_cost", required = false) Integer minCost,
+            @RequestParam(name = "title_part", required = false) String titlePart
+    ) {
+        if (page < 1) {
+            page = 1;
+        }
+        return productService.findAll(minCost, maxCost, titlePart, page)
+                .map(p -> new ProductDto(p));
     }
 
-    @GetMapping("/products/delete/{id}")
+    @GetMapping("/{id}")
+    public ProductDto findProductById(@PathVariable Long id) {
+        return productService
+                .findProductById(id).map(p -> new ProductDto(p))
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id));
+    }
+
+    @DeleteMapping("/{id}")
     public void deleteProductById(@PathVariable Long id) {
         productService.deleteProductById(id);
     }
 
-    @GetMapping("/products/{id}")
-    public Product findProductById(@PathVariable Long id) {
-        return productService.findProductById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id));
+    @PostMapping()
+    public ProductDto addNewProduct(@RequestBody ProductDto productDto) {
+        productDto.setId(null);
+        return new ProductDto(productService.addNewProduct(new Product(productDto)));
     }
 
-    @PostMapping("/products")
-    public void addNewProduct(@RequestBody Product product) {
-        productService.addNewProduct(product);
+    @PutMapping()
+    public ProductDto updateProduct(@RequestBody ProductDto productDto) {
+        return new ProductDto(productService.save(new Product(productDto)));
     }
 
-    @GetMapping("/products/change_cost")
+    @PatchMapping("/change_cost")
     public void changeCost(@RequestParam Long productId, @RequestParam Integer delta) {
         productService.changeCost(productId, delta);
-    }
-
-    @GetMapping("/products/change_page")
-    public List<Product> changePage(@RequestParam(defaultValue = "1") Long min, @RequestParam(defaultValue = "10") Long max) {
-        return productService.changePage(min, max);
-    }
-
-
-    @GetMapping("/products/between_cost")
-    public List<Product> filterCostBetween(@RequestParam(required = false, defaultValue = "0") Integer min, @RequestParam(required = false, defaultValue = "100000") Integer max) {
-        return productService.filterCostBetween(min, max);
     }
 
 }

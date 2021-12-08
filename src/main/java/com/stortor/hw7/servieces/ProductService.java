@@ -3,10 +3,13 @@ package com.stortor.hw7.servieces;
 import com.stortor.hw7.entity.Product;
 import com.stortor.hw7.exceptions.ResourceNotFoundException;
 import com.stortor.hw7.repositories.ProductRepository;
+import com.stortor.hw7.repositories.specification.ProductSpecifications;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -19,12 +22,18 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> findAll() {
-        return productRepository.findAll();
-    }
-
-    public List<Product> changePage(Long min, Long max) {
-        return productRepository.findAllByIdBetween(min, max);
+    public Page<Product> findAll(Integer minCost, Integer maxCost, String titlePart, Integer page) {
+        Specification<Product> spec = Specification.where(null);
+        if (minCost != null) {
+            spec = spec.and(ProductSpecifications.costGreaterOrEqualsThen(minCost));
+        }
+        if (maxCost != null) {
+            spec = spec.and(ProductSpecifications.costLessOrEqualsThen(maxCost));
+        }
+        if (titlePart != null) {
+            spec = spec.and(ProductSpecifications.titleLike(titlePart));
+        }
+        return productRepository.findAll(spec, PageRequest.of(page - 1, 10));
     }
 
     public void deleteProductById(Long id) {
@@ -35,8 +44,8 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
-    public void addNewProduct(Product product) {
-        productRepository.save(product);
+    public Product addNewProduct(Product product) {
+        return productRepository.save(product);
     }
 
     @Transactional
@@ -45,8 +54,7 @@ public class ProductService {
         product.setCost(product.getCost() + delta);
     }
 
-    public List<Product> filterCostBetween(Integer min, Integer max) {
-        return productRepository.findAllByCostBetween(min, max);
+    public Product save(Product product) {
+        return productRepository.save(product);
     }
-
 }

@@ -17,18 +17,35 @@
 <div class="container" ng-controller="indexController">
     <br>
     <h3>Фильтр продуктов по стоимости</h3>
-    <form novalidate ng-submit="filterProductsByCost()">
+    <form novalidate ng-submit="loadProducts()">
         <div class="mb-3">
-            <label class="form-label">Минимальная стоимость</label>
-            <input type="number" class="form-control" placeholder="По умолчанию 0" ng-model="filter.min">
+            <div class="mb-3">
+                <label for="filterTitle">Название продукта</label>
+                <input type="text" class="form-control" id="filterTitle" ng-model="filter.title_part">
+            </div>
+            <label for="filterMinCost">Минимальная стоимость</label>
+            <input type="number" class="form-control" id="filterMinCost" ng-model="filter.min_cost">
         </div>
         <div class="mb-3">
-            <label class="form-label">Максимальная стоимость</label>
-            <input type="number" class="form-control" placeholder="По умолчанию 10000" ng-model="filter.max">
+            <label for="filterMaxCost">Максимальная стоимость</label>
+            <input type="number" class="form-control" id="filterMaxCost" ng-model="filter.max_cost">
         </div>
         <button type="submit" class="btn btn-primary">Отфильтровать</button>
     </form>
     <br>
+
+    <form novalidate ng-submit="createProduct()">
+        <div class="mb-3">
+            <div class="mb-3">
+                <label for="productTitle">Имя продукта</label>
+                <input type="text" class="form-control" id="productTitle" ng-model="newProduct.title">
+            </div>
+            <label for="productCost">Стоимость продукта</label>
+            <input type="number" class="form-control" id="productCost" ng-model="newProduct.cost">
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить продукт</button>
+    </form>
+
     <h3>Список продуктов</h3>
     <table class="table table-success table-striped">
         <tr>
@@ -52,8 +69,8 @@
         </tr>
         </tbody>
     </table>
-    <button class="btn btn-warning" ng-click="changePage(1, 10)">1</button>
-    <button class="btn btn-warning" ng-click="changePage(11, 20)">2</button>
+    <button class="btn btn-warning" ng-click="deleteProduct(p.id)">Удалить</button>
+
 </div>
 </body>
 </html>
