@@ -16,35 +16,60 @@
 
 <div class="container" ng-controller="indexController">
     <br>
-    <h3>Фильтр продуктов по стоимости</h3>
-    <form novalidate ng-submit="loadProducts()">
-        <div class="mb-3">
-            <div class="mb-3">
-                <label for="filterTitle">Название продукта</label>
-                <input type="text" class="form-control" id="filterTitle" ng-model="filter.title_part">
-            </div>
-            <label for="filterMinCost">Минимальная стоимость</label>
-            <input type="number" class="form-control" id="filterMinCost" ng-model="filter.min_cost">
-        </div>
-        <div class="mb-3">
-            <label for="filterMaxCost">Максимальная стоимость</label>
-            <input type="number" class="form-control" id="filterMaxCost" ng-model="filter.max_cost">
-        </div>
-        <button type="submit" class="btn btn-primary">Отфильтровать</button>
-    </form>
-    <br>
+<!--    <h3>Фильтр продуктов по стоимости</h3>-->
+<!--    <form novalidate ng-submit="loadProducts()">-->
+<!--        <div class="mb-3">-->
+<!--            <div class="mb-3">-->
+<!--                <label for="filterTitle">Название продукта</label>-->
+<!--                <input type="text" class="form-control" id="filterTitle" ng-model="filter.title_part">-->
+<!--            </div>-->
+<!--            <label for="filterMinCost">Минимальная стоимость</label>-->
+<!--            <input type="number" class="form-control" id="filterMinCost" ng-model="filter.min_cost">-->
+<!--        </div>-->
+<!--        <div class="mb-3">-->
+<!--            <label for="filterMaxCost">Максимальная стоимость</label>-->
+<!--            <input type="number" class="form-control" id="filterMaxCost" ng-model="filter.max_cost">-->
+<!--        </div>-->
+<!--        <button type="submit" class="btn btn-primary">Отфильтровать</button>-->
+<!--    </form>-->
+<!--    <br>-->
 
-    <form novalidate ng-submit="createProduct()">
-        <div class="mb-3">
-            <div class="mb-3">
-                <label for="productTitle">Имя продукта</label>
-                <input type="text" class="form-control" id="productTitle" ng-model="newProduct.title">
-            </div>
-            <label for="productCost">Стоимость продукта</label>
-            <input type="number" class="form-control" id="productCost" ng-model="newProduct.cost">
-        </div>
-        <button type="submit" class="btn btn-primary">Добавить продукт</button>
-    </form>
+<!--    <form novalidate ng-submit="createProduct()">-->
+<!--        <div class="mb-3">-->
+<!--            <div class="mb-3">-->
+<!--                <label for="productTitle">Имя продукта</label>-->
+<!--                <input type="text" class="form-control" id="productTitle" ng-model="newProduct.title">-->
+<!--            </div>-->
+<!--            <label for="productCost">Стоимость продукта</label>-->
+<!--            <input type="number" class="form-control" id="productCost" ng-model="newProduct.cost">-->
+<!--        </div>-->
+<!--        <button type="submit" class="btn btn-primary">Добавить продукт</button>-->
+<!--    </form>-->
+<!--    <br>-->
+
+    <h3>Корзина</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название продукта</th>
+            <th>Количество</th>
+            <th>Стоимость</th>
+            <th>Действие</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="p in CartList">
+            <td>{{p.id}}</td>
+            <td>{{p.title}}</td>
+            <td></td>
+            <td>{{p.cost}}</td>
+            <td>
+                <button class="btn btn-warning" ng-click="deleteFromCart(p.id)">Удалить из корзины</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
     <h3>Список продуктов</h3>
     <table class="table table-success table-striped">
@@ -55,7 +80,7 @@
             <td>Действие</td>
         </tr>
         <tbody>
-        <tr ng-repeat="p in ProductsList">
+        <tr ng-repeat="p in ProductsPage.content">
             <td>{{p.id}}</td>
             <td>{{p.title}}</td>
             <td>
@@ -64,12 +89,14 @@
                 <button class="btn btn-info" ng-click="changeCost(p.id, 5)">+</button>
             </td>
             <td>
+                <button class="btn btn-warning" ng-click="addProductToCart(p.id)">Добавить в корзину</button>
+            </td>
+            <td>
                 <button class="btn btn-warning" ng-click="deleteProduct(p.id)">Удалить</button>
             </td>
         </tr>
         </tbody>
     </table>
-    <button class="btn btn-warning" ng-click="deleteProduct(p.id)">Удалить</button>
 
 </div>
 </body>

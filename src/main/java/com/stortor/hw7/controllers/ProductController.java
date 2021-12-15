@@ -1,21 +1,23 @@
 package com.stortor.hw7.controllers;
 
+import com.stortor.hw7.converters.ProductConverter;
 import com.stortor.hw7.dto.ProductDto;
 import com.stortor.hw7.entity.Product;
 import com.stortor.hw7.exceptions.ResourceNotFoundException;
 import com.stortor.hw7.servieces.ProductService;
+import com.stortor.hw7.validators.ProductValidator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/v1/products")
 @RestController
+@RequiredArgsConstructor
 public class ProductController {
 
-    private ProductService productService;
-
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
+    private final ProductService productService;
+    private final ProductConverter productConverter;
+    private final ProductValidator productValidator;
 
     @GetMapping()
     public Page<ProductDto> getAllProducts(
@@ -28,14 +30,14 @@ public class ProductController {
             page = 1;
         }
         return productService.findAll(minCost, maxCost, titlePart, page)
-                .map(p -> new ProductDto(p));
+                .map(p -> productConverter.entityToDto(p));
     }
 
     @GetMapping("/{id}")
     public ProductDto findProductById(@PathVariable Long id) {
-        return productService
-                .findProductById(id).map(p -> new ProductDto(p))
+        Product product = productService.findProductById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id));
+        return productConverter.entityToDto(product);
     }
 
     @DeleteMapping("/{id}")
@@ -46,18 +48,23 @@ public class ProductController {
     @PostMapping()
     public ProductDto addNewProduct(@RequestBody ProductDto productDto) {
         productDto.setId(null);
-        return new ProductDto(productService.addNewProduct(new Product(productDto)));
+        productValidator.validate(productDto);
+        Product product = productConverter.dtoToEntity(productDto);
+        return productConverter.entityToDto(productService.save(product));
     }
 
-    // ошиблась, переделать
     @PutMapping()
     public ProductDto updateProduct(@RequestBody ProductDto productDto) {
-        return new ProductDto(productService.save(new Product(productDto)));
+        productValidator.validate(productDto);
+        Product product = productService.update(productDto);
+        return productConverter.entityToDto(product);
     }
 
     @PatchMapping("/change_cost")
-    public void changeCost(@RequestParam Long productId, @RequestParam Integer delta) {
-        productService.changeCost(productId, delta);
+    public ProductDto changeCost(@RequestParam Long productId, @RequestParam Integer delta) {
+        Product product = productService.changeCost(productId, delta);
+        productValidator.validateCost(product);
+        return productConverter.entityToDto(product);
     }
 
 }

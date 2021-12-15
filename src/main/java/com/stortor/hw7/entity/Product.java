@@ -1,11 +1,17 @@
 package com.stortor.hw7.entity;
 
 import com.stortor.hw7.dto.ProductDto;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "products")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
 
     @Id
@@ -19,44 +25,5 @@ public class Product {
     @Column(name = "cost")
     private Integer cost;
 
-    public Product() {
-    }
 
-    public Product(Long id, String title, Integer cost) {
-        this.id = id;
-        this.title = title;
-        this.cost = cost;
-    }
-
-    public Product(ProductDto productDto) {
-        this.id = productDto.getId();
-        this.title = productDto.getTitle();
-        this.cost = productDto.getCost();
-    }
-
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Integer getCost() {
-        return cost;
-    }
-
-    public void setCost(Integer cost) {
-        this.cost = cost;
-    }
 }

@@ -11,7 +11,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
                 max_cost: $scope.filter ? $scope.filter.max_cost : null,
             }
         }).then(function (response) {
-            $scope.ProductsList = response.data.content;
+            $scope.ProductsPage = response.data;
             console.log(response.data.content);
         });
     };
@@ -43,5 +43,39 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         });
     }
 
+    $scope.deleteProduct = function (productId) {
+        $http.delete(contextPath + '/carts/' + productId)  // запрос по адресу
+            .then(function (response) {
+                $scope.loadProducts();
+            });
+    }
+
+    $scope.addProductToCart = function (productId) {
+        $http.get(contextPath + '/carts/' + productId)  // запрос по адресу
+            .then(function (response) {
+                console.log(response);
+                $scope.loadCart();
+            });
+    }
+
+    $scope.deleteFromCart = function (productId) {
+        $http.delete(contextPath + '/carts/' + productId)  // запрос по адресу
+            .then(function (response) {
+                $scope.loadCart();
+            });
+    }
+
+    $scope.loadCart = function () {     // создание функции
+        $http({
+            url: contextPath + '/carts',
+            method: 'GET',
+        }).then(function (response) {
+            $scope.CartList = response.data;
+            console.log(response.data.content);
+        });
+    };
+
     $scope.loadProducts();
+    $scope.loadCart();
+
 });
