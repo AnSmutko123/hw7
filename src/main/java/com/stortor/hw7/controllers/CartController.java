@@ -16,7 +16,7 @@ public class CartController {
     private final CartService cartService;
 
     @GetMapping
-    public Map<ProductDto, Integer> showCart() {
+    public List<ProductDto> showCart() {
         return cartService.showCart();
     }
 

@@ -22,7 +22,7 @@ public class Cart {
     }
 
     public void deleteFromCart(Long id) {
-        productsDtoList.removeIf(p -> p.getId() == id));
+        productsDtoList.removeIf(p -> p.getId() == id);
     }
 
     public List<ProductDto> showCart() {
