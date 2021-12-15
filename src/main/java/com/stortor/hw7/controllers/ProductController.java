@@ -49,6 +49,7 @@ public class ProductController {
         return new ProductDto(productService.addNewProduct(new Product(productDto)));
     }
 
+    // ошиблась, переделать
     @PutMapping()
     public ProductDto updateProduct(@RequestBody ProductDto productDto) {
         return new ProductDto(productService.save(new Product(productDto)));
