@@ -59,13 +59,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="p in CartList">
-            <td>{{p.id}}</td>
-            <td>{{p.title}}</td>
-            <td></td>
-            <td>{{p.cost}}</td>
+<!--        Не получилось вывести именно значение key.id, key.title и тд. Выводит целиком продукт -->
+        <tr ng-repeat="(key, value) in CartMap" ng-repeat="p in CartMap.key" >
+            <td>{{key[14]}}</td>
+            <td>{{key}}</td>
+            <td>{{value}}</td>
+            <td>{{key}}</td>
             <td>
-                <button class="btn btn-warning" ng-click="deleteFromCart(p.id)">Удалить из корзины</button>
+                <button class="btn btn-warning" ng-click="deleteFromCart(id)">Удалить из корзины</button>
             </td>
         </tr>
         </tbody>

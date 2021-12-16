@@ -12,7 +12,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
             }
         }).then(function (response) {
             $scope.ProductsPage = response.data;
-            console.log(response.data.content);
+            // console.log(response.data.content);
         });
     };
 
@@ -44,7 +44,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     }
 
     $scope.deleteProduct = function (productId) {
-        $http.delete(contextPath + '/carts/' + productId)  // запрос по адресу
+        $http.delete(contextPath + '/products/' + productId)  // запрос по адресу
             .then(function (response) {
                 $scope.loadProducts();
             });
@@ -53,7 +53,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     $scope.addProductToCart = function (productId) {
         $http.get(contextPath + '/carts/' + productId)  // запрос по адресу
             .then(function (response) {
-                console.log(response);
+                // console.log(response);
                 $scope.loadCart();
             });
     }
@@ -62,6 +62,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         $http.delete(contextPath + '/carts/' + productId)  // запрос по адресу
             .then(function (response) {
                 $scope.loadCart();
+                // console.log(response);
             });
     }
 
@@ -70,10 +71,11 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
             url: contextPath + '/carts',
             method: 'GET',
         }).then(function (response) {
-            $scope.CartList = response.data;
-            console.log(response.data.content);
+            $scope.CartMap = response.data;
+            console.log(response.data);
         });
     };
+
 
     $scope.loadProducts();
     $scope.loadCart();

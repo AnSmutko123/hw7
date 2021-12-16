@@ -3,10 +3,13 @@ package com.stortor.hw7.servieces;
 import com.stortor.hw7.data.Cart;
 import com.stortor.hw7.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CartService {
@@ -14,7 +17,7 @@ public class CartService {
     private final Cart cart;
     private final ProductService productService;
 
-    public List<ProductDto> showCart() {
+    public Map<ProductDto, Integer> showCart() {
         return cart.showCart();
     }
 
@@ -24,6 +27,7 @@ public class CartService {
     }
 
     public void removeFromCart(Long id) {
-        cart.deleteFromCart(id);
+        ProductDto productDto = productService.findProductDtoById(id);
+        cart.deleteFromCart(productDto);
     }
 }
