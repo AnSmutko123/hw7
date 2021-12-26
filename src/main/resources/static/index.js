@@ -1,60 +1,83 @@
 angular.module('app', []).controller('indexController', function ($scope, $http) {
-    const contextPath = 'http://localhost:8189/app';   // адрес запроса
+    const contextPath = 'http://localhost:8189/app/api/v1';   // адрес запроса
 
-    $scope.changePage = function (min, max) {
+    $scope.loadProducts = function (pageIndex = 1) {     // создание функции
         $http({
-            url: contextPath + '/products/change_page',
+            url: contextPath + '/products',
             method: 'GET',
             params: {
-                min: min,
-                max: max
+                title_part: $scope.filter ? $scope.filter.title_part : null,
+                min_cost: $scope.filter ? $scope.filter.min_cost : null,
+                max_cost: $scope.filter ? $scope.filter.max_cost : null,
             }
         }).then(function (response) {
-            $scope.ProductsList = response.data;
+            $scope.ProductsPage = response.data;
+            // console.log(response.data.content);
         });
-    }
-
-
-    $scope.loadProducts = function () {     // создание функции
-        $http.get(contextPath + '/products')  // запрос по адресу
-            .then(function (response) {
-                $scope.ProductsList = response.data;
-            });
     };
 
     $scope.deleteProduct = function (productId) {
-        $http.get(contextPath + '/products/delete/' + productId)  // запрос по адресу
+        $http.delete(contextPath + '/products/' + productId)  // запрос по адресу
             .then(function (response) {
-                $scope.changePage();
+                $scope.loadProducts();
             });
+    }
+
+    $scope.createProduct = function () {
+        $http.post(contextPath + '/products', $scope.newProduct)
+            .then(function (response) {
+            $scope.loadProducts();
+        });
     }
 
     $scope.changeCost = function (productId, delta) {
         $http({
             url: contextPath + '/products/change_cost/',
-            method: 'GET',
+            method: 'PATCH',
             params: {
                 productId: productId,
                 delta : delta
             }
         }).then(function (response) {
-            $scope.changePage();
+            $scope.loadProducts();
         });
     }
 
-    $scope.filterProductsByCost = function () {
+    $scope.deleteProduct = function (productId) {
+        $http.delete(contextPath + '/products/' + productId)  // запрос по адресу
+            .then(function (response) {
+                $scope.loadProducts();
+            });
+    }
+
+    $scope.addProductToCart = function (productId) {
+        $http.get(contextPath + '/carts/' + productId)  // запрос по адресу
+            .then(function (response) {
+                // console.log(response);
+                $scope.loadCart();
+            });
+    }
+
+    $scope.deleteFromCart = function (productId) {
+        $http.delete(contextPath + '/carts/' + productId)  // запрос по адресу
+            .then(function (response) {
+                $scope.loadCart();
+                // console.log(response);
+            });
+    }
+
+    $scope.loadCart = function () {     // создание функции
         $http({
-            url: contextPath + '/products/between_cost',
+            url: contextPath + '/carts',
             method: 'GET',
-            params: {
-                min: $scope.filter.min,
-                max : $scope.filter.max
-            }
         }).then(function (response) {
-            $scope.ProductsList = response.data;
+            $scope.CartMap = response.data;
+            console.log(response.data);
         });
-    }
+    };
 
-    $scope.changePage();
+
+    $scope.loadProducts();
+    $scope.loadCart();
 
 });
