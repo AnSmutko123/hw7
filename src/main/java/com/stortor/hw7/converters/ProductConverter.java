@@ -15,5 +15,4 @@ public class ProductConverter {
         return new ProductDto(product.getId(), product.getTitle(), product.getCost());
     }
 
-
 }

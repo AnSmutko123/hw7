@@ -1,5 +1,9 @@
-angular.module('app', []).controller('indexController', function ($scope, $http) {
+angular.module('app', ['ngStorage']).controller('indexController', function ($scope, $http, $rootScope, $localStorage) {
     const contextPath = 'http://localhost:8189/app/api/v1';   // адрес запроса
+
+    if ($localStorage.springWebUser) {
+        $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.springWebUser.token;
+    }
 
     $scope.loadProducts = function (pageIndex = 1) {     // создание функции
         $http({
@@ -26,8 +30,8 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     $scope.createProduct = function () {
         $http.post(contextPath + '/products', $scope.newProduct)
             .then(function (response) {
-            $scope.loadProducts();
-        });
+                $scope.loadProducts();
+            });
     }
 
     $scope.changeCost = function (productId, delta) {
@@ -36,7 +40,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
             method: 'PATCH',
             params: {
                 productId: productId,
-                delta : delta
+                delta: delta
             }
         }).then(function (response) {
             $scope.loadProducts();
@@ -75,6 +79,73 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
             console.log(response.data);
         });
     };
+
+    $scope.tryToAuth = function () {
+        $http.post('http://localhost:8189/app/auth', $scope.user)
+            .then(function successCallback(response) {
+                if (response.data.token) {
+                    $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
+                    $localStorage.springWebUser = {username: $scope.user.username, token: response.data.token};
+
+                    $scope.user.username = null;
+                    $scope.user.password = null;
+                }
+            }, function errorCallback(response) {
+
+            });
+    }
+
+    $scope.tryToRegister = function () {
+        $http.post('http://localhost:8189/app/register', $scope.newUser)
+            .then(function (response) {
+                console.log(response);
+                alert('Пользователь успешно зарегистрирован');
+                if ($scope.newUser.username) {
+                    $scope.newUser.username = null;
+                }
+                if ($scope.newUser.password) {
+                    $scope.newUser.password = null;
+                }
+                if ($scope.newUser.name) {
+                    $scope.newUser.name = null;
+                }
+                if ($scope.newUser.email) {
+                    $scope.newUser.email = null;
+                }
+            });
+    }
+
+    $scope.tryToLogout = function () {
+        $scope.clearUser();
+        if ($scope.user.username) {
+            $scope.user.username = null;
+        }
+        if ($scope.user.password) {
+            $scope.user.password = null;
+        }
+    };
+
+    $scope.clearUser = function () {
+        delete $localStorage.springWebUser;
+        $http.defaults.headers.common.Authorization = '';
+    }
+
+    $rootScope.isUserLoggedIn = function () {
+        if ($localStorage.springWebUser) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    $scope.showCurrentUserInfo = function () {
+        $http.get('http://localhost:8189/app/api/v1/profile', $scope.user)
+            .then(function successCallback(response) {
+                alert('MY NAME IS: ' + response.data.username);
+            }, function errorCallback(response) {
+                alert('UNAUTHORIZED')
+            });
+    }
 
 
     $scope.loadProducts();
