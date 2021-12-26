@@ -30,7 +30,7 @@ values ('Milk', 70),
 drop table users if exists cascade;
 create table users (
                        id         bigserial primary key,
-                       username   varchar(36) not null,
+                       username   varchar(36) not null unique,
                        password   varchar(80) not null,
                        name      varchar(50),
                        email      varchar(50) unique,
