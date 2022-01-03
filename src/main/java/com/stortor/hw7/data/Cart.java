@@ -13,21 +13,21 @@ public class Cart {
     // ключ - значение
     private Map<ProductDto, Integer> productsDtoMap;
 
-    public Cart(Map<ProductDto, Integer> productsDtoList) {
-        this.productsDtoMap = productsDtoList;
-    }
-
-    public ProductDto addToCart(ProductDto productDto) {
-        if (productsDtoMap.containsKey(productDto)) {
-            Integer count = productsDtoMap.get(productDto);
-            count++;
-            productsDtoMap.put(productDto, count);
-        }
-        if (!productsDtoMap.containsKey(productDto)) {
-            productsDtoMap.put(productDto, 1);
-        }
-        return productDto;
-    }
+//    public Cart(Map<ProductDto, Integer> productsDtoList) {
+//        this.productsDtoMap = productsDtoList;
+//    }
+//
+//    public ProductDto addToCart(ProductDto productDto) {
+//        if (productsDtoMap.containsKey(productDto)) {
+//            Integer count = productsDtoMap.get(productDto);
+//            count++;
+//            productsDtoMap.put(productDto, count);
+//        }
+//        if (!productsDtoMap.containsKey(productDto)) {
+//            productsDtoMap.put(productDto, 1);
+//        }
+//        return productDto;
+//    }
 
     public void deleteFromCart(ProductDto productDto) {
         if (productsDtoMap.get(productDto) == 1) {
