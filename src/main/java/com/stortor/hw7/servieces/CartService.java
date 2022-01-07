@@ -1,33 +1,40 @@
 package com.stortor.hw7.servieces;
 
-import com.stortor.hw7.data.Cart;
-import com.stortor.hw7.dto.ProductDto;
+import com.stortor.hw7.dto.Cart;
+import com.stortor.hw7.entity.Product;
+import com.stortor.hw7.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import javax.annotation.PostConstruct;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CartService {
 
-    private final Cart cart;
     private final ProductService productService;
+    private Cart cart;
 
-    public Map<ProductDto, Integer> showCart() {
-        return cart.showCart();
+    @PostConstruct
+    public void init() {
+        cart = new Cart();
     }
 
-    public ProductDto addToCart(Long id) {
-        ProductDto productDto = productService.findProductDtoById(id);
-        return cart.addToCart(productDto);
+    public Cart getCurrentCart() {
+        return cart;
     }
 
-    public void removeFromCart(Long id) {
-        ProductDto productDto = productService.findProductDtoById(id);
-        cart.deleteFromCart(productDto);
+    public void addProductByIdToCart(Long productId) {
+        if (!getCurrentCart().addProduct(productId)) {
+            Product product = productService.findProductById(productId).orElseThrow( ()-> new ResourceNotFoundException("Невозможно добавить продукт в корзину. Продукт не найден, id: " + productId));
+            getCurrentCart().addProduct(product);
+        }
     }
+
+    public void clear() {
+        getCurrentCart().clear();
+    }
+
 }

@@ -20,44 +20,16 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
         });
     };
 
-    $scope.deleteProduct = function (productId) {
-        $http.delete(contextPath + '/products/' + productId)  // запрос по адресу
+    $scope.addToCart = function (productId) {
+        $http.get(contextPath + '/carts/add/' + productId)
             .then(function (response) {
-                $scope.loadProducts();
+                $scope.loadCart();
             });
     }
 
-    $scope.createProduct = function () {
-        $http.post(contextPath + '/products', $scope.newProduct)
+    $scope.clearCart = function () {
+        $http.get(contextPath + '/carts/clear')
             .then(function (response) {
-                $scope.loadProducts();
-            });
-    }
-
-    $scope.changeCost = function (productId, delta) {
-        $http({
-            url: contextPath + '/products/change_cost/',
-            method: 'PATCH',
-            params: {
-                productId: productId,
-                delta: delta
-            }
-        }).then(function (response) {
-            $scope.loadProducts();
-        });
-    }
-
-    $scope.deleteProduct = function (productId) {
-        $http.delete(contextPath + '/products/' + productId)  // запрос по адресу
-            .then(function (response) {
-                $scope.loadProducts();
-            });
-    }
-
-    $scope.addProductToCart = function (productId) {
-        $http.get(contextPath + '/carts/' + productId)  // запрос по адресу
-            .then(function (response) {
-                // console.log(response);
                 $scope.loadCart();
             });
     }
@@ -66,7 +38,6 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
         $http.delete(contextPath + '/carts/' + productId)  // запрос по адресу
             .then(function (response) {
                 $scope.loadCart();
-                // console.log(response);
             });
     }
 
@@ -75,13 +46,21 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
             url: contextPath + '/carts',
             method: 'GET',
         }).then(function (response) {
-            $scope.CartMap = response.data;
-            console.log(response.data);
+            $scope.Cart = response.data;
         });
     };
 
+    // $scope.createOrder = function () {
+    //     $http.get('http://localhost:8189/app/api/v1/carts', $scope.user)
+    //         .then(function successCallback(response) {
+    //             alert('MY NAME IS: ' + response.data.username);
+    //         }, function errorCallback(response) {
+    //             alert('UNAUTHORIZED')
+    //         });
+    // }
+
     $scope.tryToAuth = function () {
-        $http.post('http://localhost:8189/app/auth', $scope.user)
+        $http.post('http://localhost:8189/app/v1/users/auth', $scope.user)
             .then(function successCallback(response) {
                 if (response.data.token) {
                     $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
@@ -96,7 +75,7 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
     }
 
     $scope.tryToRegister = function () {
-        $http.post('http://localhost:8189/app/register', $scope.newUser)
+        $http.post('http://localhost:8189/app/v1/users/register', $scope.newUser)
             .then(function (response) {
                 console.log(response);
                 alert('Пользователь успешно зарегистрирован');

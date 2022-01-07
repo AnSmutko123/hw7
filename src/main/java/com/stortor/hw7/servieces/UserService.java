@@ -1,9 +1,13 @@
 package com.stortor.hw7.servieces;
 
+import com.stortor.hw7.configs.SecurityConfig;
+import com.stortor.hw7.dto.UserDto;
 import com.stortor.hw7.entity.Authority;
 import com.stortor.hw7.entity.Role;
 import com.stortor.hw7.entity.User;
+import com.stortor.hw7.exceptions.ValidationException;
 import com.stortor.hw7.repositories.UserRepository;
+import com.stortor.hw7.validators.RegisterUserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +28,18 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final SecurityConfig securityConfig;
+    private final RegisterUserValidator userValidator;
+    private final RoleService roleService;
 
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
 
     @Override
     @Transactional
@@ -47,8 +59,29 @@ public class UserService implements UserDetailsService {
         return unionSet.stream().map(a -> new SimpleGrantedAuthority(a)).collect(Collectors.toList());
     }
 
-    public User save(User user) {
-        userRepository.save(user);
-        return user;
+    public User createNewUser(User user) {
+        boolean usernameIsEmpty = userRepository.findByUsername(user.getUsername()).isEmpty();
+        boolean emailIsEmpty = userRepository.findByEmail(user.getEmail()).isEmpty();
+        userValidator.validate(user, usernameIsEmpty, emailIsEmpty);
+        String pass = securityConfig.passwordEncoder().encode(user.getPassword());
+        user.setPassword(pass);
+        Role roleUser = roleService.findRoleByName("ROLE_USER");
+        List<Role> roles = new ArrayList<>();
+        roles.add(roleUser);
+        user.setRoles(roles);
+        return userRepository.save(user);
+    }
+
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public void updateRoles(Long id, Collection<Role> roles) {
+        User user = userRepository.getById(id);
+        user.setRoles(roles);
     }
 }

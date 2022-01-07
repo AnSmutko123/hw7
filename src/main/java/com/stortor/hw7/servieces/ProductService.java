@@ -1,14 +1,11 @@
 package com.stortor.hw7.servieces;
 
 import com.stortor.hw7.converters.ProductConverter;
-import com.stortor.hw7.data.Cart;
 import com.stortor.hw7.dto.ProductDto;
 import com.stortor.hw7.entity.Product;
 import com.stortor.hw7.exceptions.ResourceNotFoundException;
 import com.stortor.hw7.repositories.ProductRepository;
 import com.stortor.hw7.repositories.specification.ProductSpecifications;
-import com.stortor.hw7.validators.ProductValidator;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +13,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 
 
