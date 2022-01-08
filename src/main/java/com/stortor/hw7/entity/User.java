@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Data
 @Entity
@@ -45,6 +46,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "authority_id")
     )
     private Collection<Authority> authorities;
+
+    @OneToMany(mappedBy = "user")
+    private List<OrderItem> orderItems;
 
     public User(Long id, String username, String password, String name, String email) {
         this.id = id;

@@ -84,4 +84,8 @@ public class UserService implements UserDetailsService {
         User user = userRepository.getById(id);
         user.setRoles(roles);
     }
+
+    public Optional<User> findUserById(Long id) {
+        return userRepository.findById(id);
+    }
 }

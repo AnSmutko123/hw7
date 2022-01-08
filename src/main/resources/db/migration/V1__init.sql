@@ -1,3 +1,4 @@
+drop table products if exists cascade;
 create table products
 (
     id    bigserial    primary    key,
@@ -41,11 +42,11 @@ create table users (
 drop table orders if exists cascade;
 create table orders (
     id              bigserial primary key,
-    user_id         bigint not null references  users(id),
-    total_price     int not null,
+    user_id         bigint not null references users(id),
+    total_price     integer not null,
     address         varchar(255),
     phone           varchar(255)
-)
+);
 
 drop table order_items if exists cascade;
 create table order_items (
@@ -53,10 +54,10 @@ create table order_items (
     product_id              bigint references products(id),
     user_id                 bigint references users(id),
     order_id                bigint references orders(id),
-    quantity                int,
-    price_per_product       int,
-    price                   int
-)
+    quantity                integer,
+    price_per_product       integer,
+    price                   integer
+);
 
 drop table authorities if exists cascade;
 create table authorities

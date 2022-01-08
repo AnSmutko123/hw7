@@ -1,12 +1,16 @@
 package com.stortor.hw7.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
 @Table(name = "orders")
+@NoArgsConstructor
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,4 +29,16 @@ public class Order {
 
     @Column(name = "phone")
     private String phone;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItems;
+
+    public Order(User user, int totalPrice, String address, String phone) {
+        this.user = user;
+        this.totalPrice = totalPrice;
+        this.address = address;
+        this.phone = phone;
+    }
+
+
 }

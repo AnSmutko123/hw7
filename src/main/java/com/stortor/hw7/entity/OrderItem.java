@@ -1,12 +1,16 @@
 package com.stortor.hw7.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Data
 @Table(name = "order_items")
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,14 +18,14 @@ public class OrderItem {
     private Long id;
 
     @JoinColumn(name = "product_id")
-    @OneToOne
+    @ManyToOne
     private Product product;
 
-    @Column(name = "user_id")
+    @JoinColumn(name = "user_id")
     @ManyToOne
     private User user;
 
-    @Column(name = "order_id")
+    @JoinColumn(name = "order_id")
     @ManyToOne
     private Order order;
 
@@ -34,5 +38,12 @@ public class OrderItem {
     @Column(name = "price")
     private Integer price;
 
-
+    public OrderItem(Product product, User user, Order order, Integer quantity, Integer pricePerProduct, Integer price) {
+        this.product = product;
+        this.user = user;
+        this.order = order;
+        this.quantity = quantity;
+        this.pricePerProduct = pricePerProduct;
+        this.price = price;
+    }
 }
