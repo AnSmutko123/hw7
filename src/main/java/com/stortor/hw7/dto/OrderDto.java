@@ -18,4 +18,9 @@ public class OrderDto {
     private String phone;
     private List<OrderItemDto> orderItemsDto;
 
+    public OrderDto(int totalPrice, String address, String phone) {
+        this.totalPrice = totalPrice;
+        this.address = address;
+        this.phone = phone;
+    }
 }

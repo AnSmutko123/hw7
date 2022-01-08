@@ -11,7 +11,6 @@ public class UserConverter {
 
     public User dtoToEntity(UserDto userDto) {
         User user = new User(userDto.getId(), userDto.getUsername(), userDto.getPassword(), userDto.getName(), userDto.getEmail());
-        log.info(user.toString());
         return user;
     }
 

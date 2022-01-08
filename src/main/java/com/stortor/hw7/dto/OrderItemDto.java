@@ -25,4 +25,12 @@ public class OrderItemDto {
         this.quantity += delta;
         this.price = this.quantity * this.pricePerProduct;
     }
+
+    public OrderItemDto(Long productId, String productTitle, int quantity, int pricePerProduct, int price) {
+        this.productId = productId;
+        this.productTitle = productTitle;
+        this.quantity = quantity;
+        this.pricePerProduct = pricePerProduct;
+        this.price = price;
+    }
 }

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -18,16 +19,15 @@ import javax.transaction.Transactional;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final ProductService productService;
-    private final UserService userService;
 
     @Transactional
     public Order createOrder(Order order) {
-        order.setId(null);
         Order orderWithoutOrderItems = new Order(order.getUser(), order.getTotalPrice(), order.getAddress(), order.getPhone());
-        log.warn(orderWithoutOrderItems.toString());
         orderRepository.save(orderWithoutOrderItems);
         return orderWithoutOrderItems;
     }
 
+    public List<Order> showAllOrders() {
+        return orderRepository.findAllOrders();
+    }
 }

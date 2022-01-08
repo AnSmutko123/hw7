@@ -3,6 +3,7 @@ package com.stortor.hw7.servieces;
 import com.stortor.hw7.dto.OrderItemDto;
 import com.stortor.hw7.entity.Order;
 import com.stortor.hw7.entity.OrderItem;
+import com.stortor.hw7.entity.Product;
 import com.stortor.hw7.entity.User;
 import com.stortor.hw7.exceptions.ResourceNotFoundException;
 import com.stortor.hw7.repositories.OrderItemRepository;
@@ -21,12 +22,11 @@ public class OrderItemService {
     private final OrderItemRepository orderItemRepository;
     private final ProductService productService;
 
-    public void createOrderWithOrderItems(Long id, Order order, List<OrderItemDto> orderItemDtos) {
-        List<OrderItem> orderItems = orderItemDtos
-                .stream()
-                .map(p -> new OrderItem(
-                        productService.findProductById(p.getProductId()).orElseThrow(() -> new ResourceNotFoundException("Товар не найден, id: " + id)),
-                        order.getUser(), order, p.getQuantity(), p.getPricePerProduct(), p.getPrice())).collect(Collectors.toList());
+    public void createOrderWithOrderItems(Long id, Order order, List<OrderItem> orderItems) {
         orderItems.stream().forEach(o -> orderItemRepository.save(o));
+    }
+
+    public List<OrderItem> showAllOrders() {
+        return orderItemRepository.findAll();
     }
 }

@@ -114,13 +114,6 @@ values ('user1', '$2a$12$CaLIJZlpbxQmxXiAaDZ0keGlcjzlHhrbAzgwqgMTQg89XGfjXedYS',
        ('user3', '$2a$12$CaLIJZlpbxQmxXiAaDZ0keGlcjzlHhrbAzgwqgMTQg89XGfjXedYS', 'John', 'jhon@gmail.com'),
        ('user4', '$2a$12$CaLIJZlpbxQmxXiAaDZ0keGlcjzlHhrbAzgwqgMTQg89XGfjXedYS', 'Archi', 'archi@gmail.com');
 
-insert into authorities (name)
-values ('READ_ADMIN_PAGE'),
-       ('READ_USER_INFO'),
-       ('READ_UNIQ_PAGE'),
-       ('READ_DEMO_PAGE'),
-       ('READ_DEMO2_PAGE');
-
 insert into roles (name)
 values ('ROLE_USER'),
        ('ROLE_ADMIN');
@@ -129,6 +122,13 @@ insert into users_roles (user_id, role_id)
 values (1, 1),
        (2, 1),
        (2, 2);
+
+insert into authorities (name)
+values ('READ_ADMIN_PAGE'),
+       ('READ_USER_INFO'),
+       ('READ_UNIQ_PAGE'),
+       ('READ_DEMO_PAGE'),
+       ('READ_DEMO2_PAGE');
 
 insert into roles_authorities (role_id, authority_id)
 values (1, 2),

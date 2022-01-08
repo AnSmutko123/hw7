@@ -1,5 +1,6 @@
 package com.stortor.hw7.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -46,9 +47,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "authority_id")
     )
     private Collection<Authority> authorities;
-
-    @OneToMany(mappedBy = "user")
-    private List<OrderItem> orderItems;
 
     public User(Long id, String username, String password, String name, String email) {
         this.id = id;
