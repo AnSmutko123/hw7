@@ -48,7 +48,6 @@ public class OrderController {
 
     @GetMapping()
     public List<OrderDto> showAllOrders() {
-        log.info(orderService.showAllOrders().toString());
         return orderService.showAllOrders().stream().map(p -> orderConverter.entityToDto(p)).collect(Collectors.toList());
     }
 
