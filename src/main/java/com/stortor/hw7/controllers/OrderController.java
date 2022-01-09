@@ -36,11 +36,12 @@ public class OrderController {
 
     private final OrderConverter orderConverter;
     private final OrderItemConverter orderItemConverter;
-
+    private final OrderValidator orderValidator;
 
     @PostMapping()
     public void createOrder(Principal principal, @RequestBody OrderDto orderDto) {
         User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new ResourceNotFoundException(String.format("Пользователь с именем = %s не найден", principal.getName())));
+        orderValidator.validate(orderDto);
         Order order = orderConverter.dtoToEntity(user, cartService.getCurrentCart(), orderDto);
         orderItemService.createOrderWithOrderItems(user, orderService.createOrder(order));
     }

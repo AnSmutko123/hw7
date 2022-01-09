@@ -16,13 +16,12 @@ import org.springframework.stereotype.Component;
 public class OrderConverter {
 
     public Order dtoToEntity(User user, Cart cart, OrderDto orderDto) {
-        Order order = new Order(
+        return new Order(
                 user,
                 cart.getTotalPrice(),
                 orderDto.getAddress(),
                 orderDto.getPhone()
         );
-        return order;
     }
 
     public OrderDto entityToDto(Order order) {

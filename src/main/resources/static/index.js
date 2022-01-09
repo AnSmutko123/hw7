@@ -37,7 +37,6 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
     $scope.createOrder = function () {
         $http.post('http://localhost:8189/app/api/v1/orders', $scope.order)
             .then(function (response) {
-                console.log($scope.order);
                 alert('Заказ успешно оформлен ' + response.data.id);
             });
     }

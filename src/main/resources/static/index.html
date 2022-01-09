@@ -120,10 +120,10 @@
             </thead>
             <tbody>
 
-            <tr ng-model="order.orderItemsDto" ng-repeat="item in Cart.items">
-                <td ng-model="item.title">{{item.productTitle}}</td>
-                <td ng-model="item.quantity">{{item.quantity}}</td>
-                <td ng-model="item.totalPrice">{{item.pricePerProduct + ' x ' + item.quantity + ' = ' + item.price}}
+            <tr ng-repeat="item in Cart.items">
+                <td>{{item.productTitle}}</td>
+                <td>{{item.quantity}}</td>
+                <td>{{item.pricePerProduct + ' x ' + item.quantity + ' = ' + item.price}}
                 </td>
             </tr>
             <tr>
@@ -149,8 +149,7 @@
                 <label class="form-label">Phone</label>
                 <input type="number" class="form-control" id="phone" ng-model="order.phone">
             </div>
-            <br>
-            <button class="btn btn-primary" ng-click="createOrder()">Оформить заказ</button>
+            <button type="submit" class="btn btn-primary">Оформить заказ</button>
         </form>
         <button class="btn btn-secondary" ng-click="clearCart()">Очистить корзину</button>
     </div>

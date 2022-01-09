@@ -6,6 +6,7 @@ import com.stortor.hw7.entity.Product;
 import com.stortor.hw7.entity.User;
 import com.stortor.hw7.exceptions.ResourceNotFoundException;
 import com.stortor.hw7.repositories.OrderRepository;
+import com.stortor.hw7.validators.OrderValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,9 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final OrderValidator orderValidator;
 
     public Order createOrder(Order order) {
-        log.info("ЗАКАЗ БЕЗ АЙТЕМОВ.toString()");
-        log.info(order.toString());
         return orderRepository.save(order);
     }
 

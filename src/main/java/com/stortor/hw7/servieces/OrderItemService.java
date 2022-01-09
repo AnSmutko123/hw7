@@ -8,6 +8,7 @@ import com.stortor.hw7.entity.Product;
 import com.stortor.hw7.entity.User;
 import com.stortor.hw7.exceptions.ResourceNotFoundException;
 import com.stortor.hw7.repositories.OrderItemRepository;
+import com.stortor.hw7.validators.OrderValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,11 +24,11 @@ public class OrderItemService {
     private final OrderItemRepository orderItemRepository;
     private final CartService cartService;
     private final OrderItemConverter orderItemConverter;
+    private final OrderValidator orderItemValidator;
 
     public void createOrderWithOrderItems(User user, Order order) {
         List<OrderItem> orderItems = cartService.getCurrentCart().getItems().stream().map(p -> orderItemConverter.dtoToEntity(p, user, order)).collect(Collectors.toList());
-        log.info("ЗАКАЗ C АЙТЕМОВ.toString()");
-        log.info(orderItems.toString());
+        orderItemValidator.validateOrderItems(orderItems);
         orderItemRepository.saveAll(orderItems);
     }
 
