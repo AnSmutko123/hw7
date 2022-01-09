@@ -20,9 +20,8 @@ import java.util.stream.Collectors;
 public class OrderItemService {
 
     private final OrderItemRepository orderItemRepository;
-    private final ProductService productService;
 
-    public void createOrderWithOrderItems(Long id, Order order, List<OrderItem> orderItems) {
+    public void createOrderWithOrderItems(List<OrderItem> orderItems) {
         orderItems.stream().forEach(o -> orderItemRepository.save(o));
     }
 

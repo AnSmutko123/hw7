@@ -34,6 +34,13 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
             });
     }
 
+    $scope.createOrder = function () {
+        $http.post('http://localhost:8189/app/api/v1/orders', $scope.user, $scope.order)
+            .then(function (response) {
+                alert('Заказ успешно оформлен ' + response.data.id);
+            });
+    }
+
     $scope.deleteFromCart = function (productId) {
         $http.delete(contextPath + '/carts/' + productId)  // запрос по адресу
             .then(function (response) {
@@ -49,15 +56,6 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
             $scope.Cart = response.data;
         });
     };
-
-    // $scope.createOrder = function () {
-    //     $http.get('http://localhost:8189/app/api/v1/carts', $scope.user)
-    //         .then(function successCallback(response) {
-    //             alert('MY NAME IS: ' + response.data.username);
-    //         }, function errorCallback(response) {
-    //             alert('UNAUTHORIZED')
-    //         });
-    // }
 
     $scope.tryToAuth = function () {
         $http.post('http://localhost:8189/app/v1/users/auth', $scope.user)

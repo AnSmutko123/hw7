@@ -109,34 +109,53 @@
     </table>
 
     <div ng-show="Cart.totalPrice != '0'">
-        <h3>Корзина</h3>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Название товара</th>
-                <th>Количество</th>
-                <th>Цена</th>
-            </tr>
-            </thead>
-            <tbody>
+        <form class="row g-3" ng-submit="createOrder()">
+            <h3>Корзина</h3>
+            <table class="table" >
+                <thead>
+                <tr>
+                    <th>Название товара</th>
+                    <th>Количество</th>
+                    <th>Цена</th>
+                </tr>
+                </thead>
+                <tbody>
 
-            <tr ng-repeat="item in Cart.items">
-                <td>{{item.productTitle}}</td>
-                <td>{{item.quantity}}</td>
-                <td>{{item.pricePerProduct + ' x ' + item.quantity + ' = ' + item.price}}</td>
-            </tr>
-            <tr>
-                <td>Итого</td>
-                <td></td>
-                <td>{{Cart.totalPrice}}</td>
-            </tr>
-            </tbody>
-        </table>
-        <p>
-            <button class="btn btn-secondary" ng-click="clearCart()">Очистить корзину</button>
+                <tr ng-model="order.orderItemsDto" ng-repeat="item in Cart.items">
+                    <td ng-model="item.title">{{item.productTitle}}</td>
+                    <td ng-model="item.quantity">{{item.quantity}}</td>
+                    <td ng-model="item.totalPrice">{{item.pricePerProduct + ' x ' + item.quantity + ' = ' + item.price}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Итого</td>
+                    <td></td>
+                    <td>{{Cart.totalPrice}}</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h3>Информация для заказа</h3>
+
+            <div class="col-12">
+                <label class="form-label">Total Price</label>
+                <br>
+                <td ng-model="order.total_price">{{Cart.totalPrice}}</td>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Address</label>
+                <input type="text" class="form-control" id="address" ng-model="order.address">
+            </div>
+            <div class="col-12">
+                <label class="form-label">Phone</label>
+                <input type="number" class="form-control" id="phone" ng-model="order.phone">
+            </div>
+            <br>
             <button class="btn btn-primary" ng-click="createOrder()">Оформить заказ</button>
-        </p>
+        </form>
+        <button class="btn btn-secondary" ng-click="clearCart()">Очистить корзину</button>
     </div>
+    <br>
     <p>
         <button class="btn btn-danger" ng-click="showCurrentUserInfo()">Обо мне</button>
     </p>

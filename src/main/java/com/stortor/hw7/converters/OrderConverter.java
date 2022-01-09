@@ -14,10 +14,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OrderConverter {
 
-    private final UserService userService;
-
-    public Order dtoToEntity(Long id, OrderDto orderDto) {
-        User user = userService.findUserById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Пользователь с id = %d при оформлении заказа не найден")));
+    public Order dtoToEntity(User user, OrderDto orderDto) {
         Order order = new Order(
                 user,
                 orderDto.getTotalPrice(),
