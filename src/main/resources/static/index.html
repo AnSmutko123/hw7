@@ -109,38 +109,37 @@
     </table>
 
     <div ng-show="Cart.totalPrice != '0'">
+        <h3>Корзина</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Название товара</th>
+                <th>Количество</th>
+                <th>Цена</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr ng-model="order.orderItemsDto" ng-repeat="item in Cart.items">
+                <td ng-model="item.title">{{item.productTitle}}</td>
+                <td ng-model="item.quantity">{{item.quantity}}</td>
+                <td ng-model="item.totalPrice">{{item.pricePerProduct + ' x ' + item.quantity + ' = ' + item.price}}
+                </td>
+            </tr>
+            <tr>
+                <td>Итого</td>
+                <td></td>
+                <td>{{Cart.totalPrice}}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h3>Информация для заказа</h3>
         <form class="row g-3" ng-submit="createOrder()">
-            <h3>Корзина</h3>
-            <table class="table" >
-                <thead>
-                <tr>
-                    <th>Название товара</th>
-                    <th>Количество</th>
-                    <th>Цена</th>
-                </tr>
-                </thead>
-                <tbody>
-
-                <tr ng-model="order.orderItemsDto" ng-repeat="item in Cart.items">
-                    <td ng-model="item.title">{{item.productTitle}}</td>
-                    <td ng-model="item.quantity">{{item.quantity}}</td>
-                    <td ng-model="item.totalPrice">{{item.pricePerProduct + ' x ' + item.quantity + ' = ' + item.price}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>Итого</td>
-                    <td></td>
-                    <td>{{Cart.totalPrice}}</td>
-                </tr>
-                </tbody>
-            </table>
-
-            <h3>Информация для заказа</h3>
-
             <div class="col-12">
                 <label class="form-label">Total Price</label>
                 <br>
-                <td ng-model="order.total_price">{{Cart.totalPrice}}</td>
+                <td>{{Cart.totalPrice}}</td>
             </div>
             <div class="col-12">
                 <label class="form-label">Address</label>

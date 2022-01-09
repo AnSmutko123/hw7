@@ -22,10 +22,10 @@ public class OrderItemConverter {
 
     private final ProductService productService;
 
-    public OrderItem dtoToEntity(OrderItemDto orderItemDto, Order order) {
+    public OrderItem dtoToEntity(OrderItemDto orderItemDto, User user, Order order) {
         return new OrderItem(
                 productService.findProductById(orderItemDto.getProductId()).orElseThrow(() -> new ResourceNotFoundException("Товар не найден, id: " + orderItemDto.getProductId())),
-                order.getUser(),
+                user,
                 order,
                 orderItemDto.getQuantity(),
                 orderItemDto.getPricePerProduct(),

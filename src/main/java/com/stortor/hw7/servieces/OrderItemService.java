@@ -1,5 +1,6 @@
 package com.stortor.hw7.servieces;
 
+import com.stortor.hw7.converters.OrderItemConverter;
 import com.stortor.hw7.dto.OrderItemDto;
 import com.stortor.hw7.entity.Order;
 import com.stortor.hw7.entity.OrderItem;
@@ -20,9 +21,14 @@ import java.util.stream.Collectors;
 public class OrderItemService {
 
     private final OrderItemRepository orderItemRepository;
+    private final CartService cartService;
+    private final OrderItemConverter orderItemConverter;
 
-    public void createOrderWithOrderItems(List<OrderItem> orderItems) {
-        orderItems.stream().forEach(o -> orderItemRepository.save(o));
+    public void createOrderWithOrderItems(User user, Order order) {
+        List<OrderItem> orderItems = cartService.getCurrentCart().getItems().stream().map(p -> orderItemConverter.dtoToEntity(p, user, order)).collect(Collectors.toList());
+        log.info("ЗАКАЗ C АЙТЕМОВ.toString()");
+        log.info(orderItems.toString());
+        orderItemRepository.saveAll(orderItems);
     }
 
     public List<OrderItem> showAllOrders() {

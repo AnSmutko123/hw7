@@ -20,11 +20,10 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    @Transactional
     public Order createOrder(Order order) {
-        Order orderWithoutOrderItems = new Order(order.getUser(), order.getTotalPrice(), order.getAddress(), order.getPhone());
-        orderRepository.save(orderWithoutOrderItems);
-        return orderWithoutOrderItems;
+        log.info("ЗАКАЗ БЕЗ АЙТЕМОВ.toString()");
+        log.info(order.toString());
+        return orderRepository.save(order);
     }
 
     public List<Order> showAllOrders() {

@@ -1,5 +1,6 @@
 package com.stortor.hw7.converters;
 
+import com.stortor.hw7.dto.Cart;
 import com.stortor.hw7.dto.OrderDto;
 import com.stortor.hw7.entity.Order;
 import com.stortor.hw7.entity.User;
@@ -14,10 +15,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OrderConverter {
 
-    public Order dtoToEntity(User user, OrderDto orderDto) {
+    public Order dtoToEntity(User user, Cart cart, OrderDto orderDto) {
         Order order = new Order(
                 user,
-                orderDto.getTotalPrice(),
+                cart.getTotalPrice(),
                 orderDto.getAddress(),
                 orderDto.getPhone()
         );
@@ -26,7 +27,6 @@ public class OrderConverter {
 
     public OrderDto entityToDto(Order order) {
         return new OrderDto(
-                order.getTotalPrice(),
                 order.getAddress(),
                 order.getPhone()
         );
