@@ -20,7 +20,7 @@ public class OrderValidator {
             errors.add("Контактный телефон должен быть указан");
         }
         if (orderDto.getAddress().isEmpty() || orderDto.getAddress().isBlank()) {
-            errors.add("Контактный телефон должен быть указан");
+            errors.add("Адрес доставки должен быть указан");
         }
         if (!errors.isEmpty()) {
             throw new ValidationException(errors);

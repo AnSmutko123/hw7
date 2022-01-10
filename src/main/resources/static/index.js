@@ -38,6 +38,8 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
         $http.post('http://localhost:8189/app/api/v1/orders', $scope.order)
             .then(function (response) {
                 alert('Заказ успешно оформлен ' + response.data.id);
+                $scope.order.address = null;
+                $scope.order.phone = null;
             });
     }
 
@@ -63,7 +65,6 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
                 if (response.data.token) {
                     $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
                     $localStorage.springWebUser = {username: $scope.user.username, token: response.data.token};
-
                     $scope.user.username = null;
                     $scope.user.password = null;
                 }
@@ -123,7 +124,6 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
                 alert('UNAUTHORIZED')
             });
     }
-
 
     $scope.loadProducts();
     $scope.loadCart();
