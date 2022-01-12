@@ -2,20 +2,18 @@ package com.stortor.hw7.controllers;
 
 
 import com.stortor.hw7.converters.OrderConverter;
-import com.stortor.hw7.converters.OrderItemConverter;
+import com.stortor.hw7.converters.OrderDetailsConverter;
+import com.stortor.hw7.dto.OrderDetailsDto;
 import com.stortor.hw7.dto.OrderDto;
-import com.stortor.hw7.dto.OrderItemDto;
 import com.stortor.hw7.entity.Order;
-import com.stortor.hw7.entity.OrderItem;
 import com.stortor.hw7.entity.User;
 import com.stortor.hw7.exceptions.ResourceNotFoundException;
-import com.stortor.hw7.servieces.CartService;
-import com.stortor.hw7.servieces.OrderItemService;
 import com.stortor.hw7.servieces.OrderService;
 import com.stortor.hw7.servieces.UserService;
 import com.stortor.hw7.validators.OrderValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -31,29 +29,24 @@ public class OrderController {
 
     private final OrderService orderService;
     private final UserService userService;
-    private final CartService cartService;
-    private final OrderItemService orderItemService;
 
+    private final OrderDetailsConverter orderDetailsConverter;
     private final OrderConverter orderConverter;
-    private final OrderItemConverter orderItemConverter;
     private final OrderValidator orderValidator;
 
     @PostMapping()
-    public void createOrder(Principal principal, @RequestBody OrderDto orderDto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createOrder(Principal principal, @RequestBody OrderDetailsDto orderDetailsDto) {
         User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new ResourceNotFoundException(String.format("Пользователь с именем = %s не найден", principal.getName())));
-        orderValidator.validate(orderDto);
-        Order order = orderConverter.dtoToEntity(user, cartService.getCurrentCart(), orderDto);
-        orderItemService.createOrderWithOrderItems(user, orderService.createOrder(order));
+        orderValidator.validate(orderDetailsDto);
+        Order order = orderDetailsConverter.dtoToEntity(orderDetailsDto);
+        orderService.createOrder(user, order);
     }
 
     @GetMapping()
-    public List<OrderDto> showAllOrders() {
-        return orderService.showAllOrders().stream().map(p -> orderConverter.entityToDto(p)).collect(Collectors.toList());
-    }
-
-    @GetMapping("/items")
-    public List<OrderItemDto> showAllOrderItems() {
-        return orderItemService.showAllOrders().stream().map(p -> orderItemConverter.entityToDto(p)).collect(Collectors.toList());
+    public List<OrderDto> getCurrentUserOrders(Principal principal) {
+        return orderService.findOrdersByUsername(principal.getName()).stream()
+                .map(orderConverter::entityToDto).collect(Collectors.toList());
     }
 
 

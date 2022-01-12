@@ -1,16 +1,12 @@
 package com.stortor.hw7.servieces;
 
 import com.stortor.hw7.configs.SecurityConfig;
-import com.stortor.hw7.dto.UserDto;
-import com.stortor.hw7.entity.Authority;
 import com.stortor.hw7.entity.Role;
 import com.stortor.hw7.entity.User;
-import com.stortor.hw7.exceptions.ValidationException;
 import com.stortor.hw7.repositories.UserRepository;
 import com.stortor.hw7.validators.RegisterUserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,37 +22,24 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
-
     private final UserRepository userRepository;
-    private final SecurityConfig securityConfig;
     private final RegisterUserValidator userValidator;
     private final RoleService roleService;
+    private final SecurityConfig securityConfig;
 
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
-
-
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(String.format("User '%s' not found", username)));
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), mapAuthoritiesWithRoles(user.getRoles(), user.getAuthorities()));
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
     }
 
-    private Collection<? extends GrantedAuthority> mapAuthoritiesWithRoles(Collection<Role> roles, Collection<Authority> authorities) {
-        List<String> roleNameList = roles.stream().map(r -> r.getName()).collect(Collectors.toList());
-        List<String> authorityListFromRoles = roles.stream().map(role -> role.getAuthorities()).flatMap(auth -> auth.stream()).map(auth -> auth.getName()).collect(Collectors.toList());
-        List<String> uniqAuthorities = authorities.stream().map(a -> a.getName()).collect(Collectors.toList());
-        Set<String> unionSet = new HashSet<>();
-        unionSet.addAll(roleNameList);
-        unionSet.addAll(authorityListFromRoles);
-        unionSet.addAll(uniqAuthorities);
-        return unionSet.stream().map(a -> new SimpleGrantedAuthority(a)).collect(Collectors.toList());
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
 
     public User createNewUser(User user) {

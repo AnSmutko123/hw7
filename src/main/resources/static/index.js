@@ -35,11 +35,10 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
     }
 
     $scope.createOrder = function () {
-        $http.post('http://localhost:8189/app/api/v1/orders', $scope.order)
+        $http.post('http://localhost:8189/app/api/v1/orders', $scope.orderDetails)
             .then(function (response) {
                 alert('Заказ успешно оформлен ' + response.data.id);
-                $scope.order.address = null;
-                $scope.order.phone = null;
+                $scope.orderDetails = null;
             });
     }
 
@@ -56,6 +55,15 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
             method: 'GET',
         }).then(function (response) {
             $scope.Cart = response.data;
+        });
+    };
+
+    $scope.loadOrders = function () {     // создание функции
+        $http({
+            url: contextPath + '/orders',
+            method: 'GET',
+        }).then(function (response) {
+            $scope.MyOrders = response.data;
         });
     };
 
@@ -127,5 +135,7 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
 
     $scope.loadProducts();
     $scope.loadCart();
+    $scope.loadOrders();
+
 
 });

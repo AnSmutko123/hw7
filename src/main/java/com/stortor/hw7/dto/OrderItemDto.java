@@ -1,11 +1,13 @@
 package com.stortor.hw7.dto;
 
 import com.stortor.hw7.entity.Product;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderItemDto {
     private Long productId;
     private String productTitle;
@@ -17,8 +19,8 @@ public class OrderItemDto {
         this.productId = product.getId();
         this.productTitle = product.getTitle();
         this.quantity = 1;
-        this.pricePerProduct = product.getCost();
-        this.price = product.getCost();
+        this.pricePerProduct = product.getPrice();
+        this.price = product.getPrice();
     }
 
     public void changeQuantity(int delta) {
@@ -26,11 +28,4 @@ public class OrderItemDto {
         this.price = this.quantity * this.pricePerProduct;
     }
 
-    public OrderItemDto(Long productId, String productTitle, int quantity, int pricePerProduct, int price) {
-        this.productId = productId;
-        this.productTitle = productTitle;
-        this.quantity = quantity;
-        this.pricePerProduct = pricePerProduct;
-        this.price = price;
-    }
 }

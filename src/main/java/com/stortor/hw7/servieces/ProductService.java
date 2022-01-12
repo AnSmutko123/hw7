@@ -56,14 +56,14 @@ public class ProductService {
     @Transactional
     public Product changeCost(Long productId, Integer delta) {
         Product product = productRepository.findById(productId).orElseThrow(()-> new ResourceNotFoundException("Unable to change product's cost. Product not found, id: " + productId));
-        product.setCost(product.getCost() + delta);
+        product.setPrice(product.getPrice() + delta);
         return product;
     }
 
     @Transactional
     public Product update(ProductDto productDto) {
         Product product = productRepository.findById(productDto.getId()).orElseThrow(() -> new ResourceNotFoundException(String.format("Unable to update product. Product id = %d not found", productDto.getId())));
-        product.setCost(productDto.getCost());
+        product.setPrice(productDto.getCost());
         product.setTitle(productDto.getTitle());
         return product;
     }

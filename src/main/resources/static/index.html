@@ -134,24 +134,14 @@
             </tbody>
         </table>
 
-        <h3>Информация для заказа</h3>
-        <form class="row g-3" ng-submit="createOrder()">
-            <div class="col-12">
-                <label class="form-label">Total Price</label>
-                <br>
-                <td>{{Cart.totalPrice}}</td>
-            </div>
-            <div class="col-12">
-                <label class="form-label">Address</label>
-                <input type="text" class="form-control" id="address" ng-model="order.address">
-            </div>
-            <div class="col-12">
-                <label class="form-label">Phone</label>
-                <input type="number" class="form-control" id="phone" ng-model="order.phone">
-            </div>
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary">Оформить заказ</button>
-            </div>
+        <p></p>
+        <h3>Детали заказа</h3>
+        <form novalidate ng-submit="createOrder()">
+            <input class="form-control" type="text" placeholder="Номер телефона получателя" ng-model="orderDetails.phone">
+            <p></p>
+            <input class="form-control" type="text" placeholder="Адрес доставки" ng-model="orderDetails.address">
+            <p></p>
+            <button type="submit" class="btn btn-primary">Оформить заказ</button>
         </form>
         <br>
         <button class="btn btn-secondary" ng-click="clearCart()">Очистить корзину</button>
@@ -160,6 +150,26 @@
     <p>
         <button class="btn btn-danger" ng-click="showCurrentUserInfo()">Обо мне</button>
     </p>
+
+    <h3>Мои заказы</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Адрес</th>
+            <th>Стоимость</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr ng-repeat="order in MyOrders">
+            <td>{{order.id}}</td>
+            <td>{{order.address}}</td>
+            <td>{{order.totalPrice}}</td>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
 </div>
 </body>

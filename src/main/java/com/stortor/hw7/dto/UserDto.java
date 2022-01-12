@@ -25,10 +25,14 @@ public class UserDto {
         this.email = email;
     }
 
-    public UserDto(String username, String name, String email, Collection<Role> roles) {
+    public UserDto(String username, String email, Collection<Role> roles) {
         this.username = username;
-        this.name = name;
-        this.email = email;
+         this.email = email;
         this.roles = roles;
+    }
+
+    public UserDto(String username, String email) {
+        this.username = username;
+        this.email = email;
     }
 }

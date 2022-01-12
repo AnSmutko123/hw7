@@ -1,34 +1,31 @@
 package com.stortor.hw7.converters;
 
-import com.stortor.hw7.dto.Cart;
 import com.stortor.hw7.dto.OrderDto;
 import com.stortor.hw7.entity.Order;
-import com.stortor.hw7.entity.User;
-import com.stortor.hw7.exceptions.ResourceNotFoundException;
-import com.stortor.hw7.servieces.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-@Slf4j
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class OrderConverter {
+    private final OrderItemConverter orderItemConverter;
 
-    public Order dtoToEntity(User user, Cart cart, OrderDto orderDto) {
-        return new Order(
-                user,
-                cart.getTotalPrice(),
-                orderDto.getAddress(),
-                orderDto.getPhone()
-        );
+    public Order dtoToEntity(OrderDto orderDto) {
+        throw new UnsupportedOperationException();
     }
 
     public OrderDto entityToDto(Order order) {
-        return new OrderDto(
-                order.getAddress(),
-                order.getPhone()
+        OrderDto out = new OrderDto();
+        out.setAddress(order.getAddress());
+        out.setPhone(order.getPhone());
+        out.setTotalPrice(order.getTotalPrice());
+        out.setUsername(order.getUser().getUsername());
+        out.setItems(order.getItems().stream().map(
+                orderItemConverter::entityToDto).collect(Collectors.toList())
         );
+        return out;
     }
 
 }

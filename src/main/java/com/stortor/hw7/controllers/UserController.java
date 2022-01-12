@@ -4,7 +4,6 @@ import com.stortor.hw7.converters.UserConverter;
 import com.stortor.hw7.dto.JwtRequest;
 import com.stortor.hw7.dto.JwtResponse;
 import com.stortor.hw7.dto.UserDto;
-import com.stortor.hw7.entity.Role;
 import com.stortor.hw7.errors.AppError;
 import com.stortor.hw7.servieces.UserService;
 import com.stortor.hw7.utils.JwtTokenUtil;

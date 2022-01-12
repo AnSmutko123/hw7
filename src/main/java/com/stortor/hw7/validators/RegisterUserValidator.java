@@ -1,12 +1,9 @@
 package com.stortor.hw7.validators;
 
-import com.stortor.hw7.dto.ProductDto;
 import com.stortor.hw7.entity.User;
 import com.stortor.hw7.exceptions.ValidationException;
-import com.stortor.hw7.servieces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

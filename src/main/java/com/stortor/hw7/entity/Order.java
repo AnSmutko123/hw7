@@ -3,14 +3,18 @@ package com.stortor.hw7.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
+@Table(name = "orders")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +25,11 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<OrderItem> items;
+
     @Column(name = "total_price")
-    private int totalPrice;
+    private Integer totalPrice;
 
     @Column(name = "address")
     private String address;
@@ -30,19 +37,15 @@ public class Order {
     @Column(name = "phone")
     private String phone;
 
-//    @JoinColumn()
-//    @OneToMany
-//    private List<OrderItem> orderItems;
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-    public Order(User user, int totalPrice, String address, String phone) {
-        this.user = user;
-        this.totalPrice = totalPrice;
-        this.address = address;
-        this.phone = phone;
-    }
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
-    public Order(User user, String address, String phone) {
-        this.user = user;
+    public Order(String address, String phone) {
         this.address = address;
         this.phone = phone;
     }
