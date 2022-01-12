@@ -1,11 +1,16 @@
 package com.stortor.hw7.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 @Data
 @Entity
@@ -45,6 +50,14 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "authority_id")
     )
     private Collection<Authority> authorities;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     public User(Long id, String username, String password, String name, String email) {
         this.id = id;

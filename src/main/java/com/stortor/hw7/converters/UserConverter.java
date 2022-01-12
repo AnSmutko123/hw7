@@ -1,6 +1,6 @@
 package com.stortor.hw7.converters;
 
-import com.stortor.hw7.dto.RegisterUserDto;
+import com.stortor.hw7.dto.UserDto;
 import com.stortor.hw7.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -9,14 +9,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class UserConverter {
 
-    public User dtoToEntity(RegisterUserDto userDto) {
-        User user = new User(userDto.getId(), userDto.getUsername(), userDto.getPassword(), userDto.getName(), userDto.getEmail());
-        log.info(user.toString());
+    public User dtoToEntity(UserDto userDto) {
+        User user = new User(userDto.getId(), userDto.getName(), userDto.getUsername(), userDto.getPassword(), userDto.getEmail());
         return user;
     }
 
-    public RegisterUserDto entityToDto(User user) {
-        RegisterUserDto userDto = new RegisterUserDto(user.getUsername(), user.getName(), user.getEmail());
+    public UserDto entityToDto(User user) {
+        UserDto userDto = new UserDto(user.getUsername(), user.getEmail());
+        return userDto;
+    }
+
+    public UserDto entityToDtoWithRoles(User user) {
+        UserDto userDto = new UserDto(user.getUsername(), user.getEmail(), user.getRoles());
         return userDto;
     }
 

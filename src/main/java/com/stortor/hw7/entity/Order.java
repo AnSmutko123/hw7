@@ -1,6 +1,5 @@
 package com.stortor.hw7.entity;
 
-import com.stortor.hw7.dto.ProductDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,21 +11,31 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "products")
 @Data
 @NoArgsConstructor
-public class Product {
-
+@AllArgsConstructor
+@Table(name = "orders")
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "title")
-    private String title;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "cost")
-    private Integer cost;
+    @Column(name = "total_price")
+    private int totalPrice;
+
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<OrderItem> items;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -36,9 +45,8 @@ public class Product {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public Product(Long id, String title, Integer cost) {
-        this.id = id;
-        this.title = title;
-        this.cost = cost;
+    public Order(String address, String phone) {
+        this.address = address;
+        this.phone = phone;
     }
 }

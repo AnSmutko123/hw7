@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 /**
- * 1. Добавить регистрацию новых пользователей
+ * 1. Вынести заказы на отдельную страницу на фронте
  */
 
 @Configuration
