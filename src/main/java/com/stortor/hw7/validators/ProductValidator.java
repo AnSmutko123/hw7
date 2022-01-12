@@ -27,7 +27,7 @@ public class ProductValidator {
     }
 
     public void validateCost(Product product) {
-        if (product.getPrice() < 1) {
+        if (product.getCost() < 1) {
             throw new ValidationException("Стоимость продукта должна быть не менее 1 руб");
         }
     }

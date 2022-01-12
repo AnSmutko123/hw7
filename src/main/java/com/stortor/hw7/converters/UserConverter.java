@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class UserConverter {
 
     public User dtoToEntity(UserDto userDto) {
-        User user = new User(userDto.getId(), userDto.getUsername(), userDto.getPassword(), userDto.getEmail());
+        User user = new User(userDto.getId(), userDto.getName(), userDto.getUsername(), userDto.getPassword(), userDto.getEmail());
         return user;
     }
 

@@ -20,8 +20,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProductService {
 
-    private final ProductRepository productRepository;
     private final ProductConverter converter;
+    private final ProductRepository productRepository;
 
     public Page<Product> findAll(Integer minCost, Integer maxCost, String titlePart, Integer page) {
         Specification<Product> spec = Specification.where(null);
@@ -56,14 +56,14 @@ public class ProductService {
     @Transactional
     public Product changeCost(Long productId, Integer delta) {
         Product product = productRepository.findById(productId).orElseThrow(()-> new ResourceNotFoundException("Unable to change product's cost. Product not found, id: " + productId));
-        product.setPrice(product.getPrice() + delta);
+        product.setCost(product.getCost() + delta);
         return product;
     }
 
     @Transactional
     public Product update(ProductDto productDto) {
         Product product = productRepository.findById(productDto.getId()).orElseThrow(() -> new ResourceNotFoundException(String.format("Unable to update product. Product id = %d not found", productDto.getId())));
-        product.setPrice(productDto.getCost());
+        product.setCost(productDto.getCost());
         product.setTitle(productDto.getTitle());
         return product;
     }
