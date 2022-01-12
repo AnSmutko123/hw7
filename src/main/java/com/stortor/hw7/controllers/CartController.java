@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@RequestMapping("/api/v1/carts")
+@RequestMapping("/api/v1/cart")
 @RestController
 @RequiredArgsConstructor
 public class CartController {

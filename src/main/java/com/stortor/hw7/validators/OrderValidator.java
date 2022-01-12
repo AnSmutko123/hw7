@@ -13,6 +13,7 @@ import java.util.List;
 @Component
 public class OrderValidator {
 
+
     public void validate(OrderDetailsDto orderDto) {
         List<String> errors = new ArrayList<>();
         if (orderDto.getPhone() != null && orderDto.getPhone().isBlank()) {

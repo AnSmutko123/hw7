@@ -1,11 +1,14 @@
 package com.stortor.hw7.servieces;
 
 import com.stortor.hw7.dto.Cart;
+import com.stortor.hw7.dto.OrderItemDto;
 import com.stortor.hw7.entity.Order;
 import com.stortor.hw7.entity.OrderItem;
+import com.stortor.hw7.entity.Product;
 import com.stortor.hw7.entity.User;
 import com.stortor.hw7.exceptions.ResourceNotFoundException;
 import com.stortor.hw7.repositories.OrderRepository;
+import com.stortor.hw7.validators.OrderValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +26,6 @@ public class OrderService {
     private final CartService cartService;
     private final ProductService productService;
 
-    @Transactional
     public void createOrder(User user, Order order) {
         Cart currentCart = cartService.getCurrentCart();
         order.setUser(user);

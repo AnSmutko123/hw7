@@ -1,5 +1,6 @@
 package com.stortor.hw7.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,9 +10,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
-@Entity
 @Data
+@Entity
 @Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,14 +29,27 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "email")
     private String email;
 
     @ManyToMany
-    @JoinTable(name = "users_roles",
+    @JoinTable(
+            name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     private Collection<Role> roles;
+
+    @ManyToMany
+    @JoinTable(
+            name = "users_authorities",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id")
+    )
+    private Collection<Authority> authorities;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -44,11 +59,11 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public User(Long id, String username, String password, String email) {
+    public User(Long id, String username, String password, String name, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.name = name;
         this.email = email;
     }
-
 }

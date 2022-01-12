@@ -38,6 +38,7 @@ public class OrderController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createOrder(Principal principal, @RequestBody OrderDetailsDto orderDetailsDto) {
         User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new ResourceNotFoundException(String.format("Пользователь с именем = %s не найден", principal.getName())));
+        log.info(orderDetailsDto.toString());
         orderValidator.validate(orderDetailsDto);
         Order order = orderDetailsConverter.dtoToEntity(orderDetailsDto);
         orderService.createOrder(user, order);
