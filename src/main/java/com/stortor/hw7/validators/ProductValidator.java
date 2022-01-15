@@ -18,7 +18,7 @@ public class ProductValidator {
         if (productDto.getTitle().isBlank() || productDto.getTitle().isEmpty()) {
             errors.add("У продукта должно быть имя");
         }
-        if (productDto.getCost() < 1) {
+        if (productDto.getPrice() < 1) {
             errors.add("Стоимость продукта должна быть не менее 1 руб");
         }
         if (!errors.isEmpty()) {
@@ -26,8 +26,8 @@ public class ProductValidator {
         }
     }
 
-    public void validateCost(Product product) {
-        if (product.getCost() < 1) {
+    public void validatePrice(Product product) {
+        if (product.getPrice() < 1) {
             throw new ValidationException("Стоимость продукта должна быть не менее 1 руб");
         }
     }

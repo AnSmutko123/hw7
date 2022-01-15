@@ -4,7 +4,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 /**
- * 1. Вынести заказы на отдельную страницу на фронте
+ * 1. Добавить категории продуктов
+ * 2. Добавить фильтр по категориям
+ * 3. Разобраться в механизме работы корзины
  */
 
 @Configuration
