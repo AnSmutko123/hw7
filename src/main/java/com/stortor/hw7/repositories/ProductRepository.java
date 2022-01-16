@@ -13,9 +13,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
-
-//    @Query("select p from Product p join Category c on p.category.id")
-//    public Page<Product> findAll(@Nullable Specification<Product> spec, Pageable pageable);
-
-
 }
