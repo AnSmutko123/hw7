@@ -14,7 +14,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -25,7 +24,7 @@ public class ProductsService {
     private final ProductConverter converter;
     private final ProductRepository productRepository;
 
-    public Page<Product> findAll(Integer minPrice, Integer maxPrice, String titlePart, Integer titlePartCategory, Integer page) {
+    public Page<Product> findAll(Integer minPrice, Integer maxPrice, String titlePart, String titlePartCategory, Integer page) {
         Specification<Product> spec = Specification.where(null);
         if (minPrice != null) {
             spec = spec.and(ProductSpecifications.priceGreaterOrEqualsThen(minPrice));
@@ -36,9 +35,9 @@ public class ProductsService {
         if (titlePart != null) {
             spec = spec.and(ProductSpecifications.titleLike(titlePart));
         }
-//        if (titlePartCategory != null) {
-//            spec = spec.and(ProductSpecifications.titleLikeCategory(titlePartCategory));
-//        }
+        if (titlePartCategory != null) {
+            spec = spec.and(ProductSpecifications.titleLikeCategory(titlePartCategory));
+        }
         return productRepository.findAll(spec, PageRequest.of(page - 1, 8));
     }
 

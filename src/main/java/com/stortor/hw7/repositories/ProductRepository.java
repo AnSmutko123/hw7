@@ -10,10 +10,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+
+//    @Query("select p from Product p join Category c on p.category.id")
+//    public Page<Product> findAll(@Nullable Specification<Product> spec, Pageable pageable);
+
 
 }
