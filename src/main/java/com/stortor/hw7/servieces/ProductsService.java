@@ -14,7 +14,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -41,6 +44,23 @@ public class ProductsService {
         return productRepository.findAll(spec, PageRequest.of(page - 1, 8));
     }
 
+    public static final Function<Product, com.stortor.hw7.soap.Product> functionEntityToSoap = se -> {
+        com.stortor.hw7.soap.Product p = new com.stortor.hw7.soap.Product();
+        p.setId(se.getId());
+        p.setTitle(se.getTitle());
+        p.setPrice(se.getPrice());
+        p.setCategoryTitle(se.getCategory().getTitle());
+        return p;
+    };
+
+    public List<com.stortor.hw7.soap.Product> findAll() {
+        return productRepository.findAll().stream().map(functionEntityToSoap).collect(Collectors.toList());
+    }
+
+    public com.stortor.hw7.soap.Product findByTitle(String title) {
+        return productRepository.findByTitle(title).map(functionEntityToSoap).get();
+    }
+
     public void deleteProductById(Long id) {
         productRepository.deleteById(id);
     }
@@ -48,6 +68,8 @@ public class ProductsService {
     public Optional<Product> findById(Long id) {
         return productRepository.findById(id);
     }
+
+
 
     public ProductDto findProductDtoById(Long id) {
         return converter.entityToDto(findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id)));
