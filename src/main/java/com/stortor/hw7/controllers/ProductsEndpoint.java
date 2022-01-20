@@ -3,8 +3,8 @@ package com.stortor.hw7.controllers;
 import com.stortor.hw7.servieces.ProductsService;
 import com.stortor.hw7.soap.GetAllProductsRequest;
 import com.stortor.hw7.soap.GetAllProductsResponse;
-import com.stortor.hw7.soap.GetProductByTitleRequest;
-import com.stortor.hw7.soap.GetProductByTitleResponse;
+import com.stortor.hw7.soap.GetProductByIdRequest;
+import com.stortor.hw7.soap.GetProductByIdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -17,11 +17,11 @@ public class ProductsEndpoint {
     private static final String NAMESPACE_URI = "http://www.stortor.com/hw7/products";
     private final ProductsService productsService;
 
-    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getProductByTitleRequest")
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getProductByIdRequest")
     @ResponsePayload
-    public GetProductByTitleResponse getProductByName(@RequestPayload GetProductByTitleRequest request) {
-        GetProductByTitleResponse response = new GetProductByTitleResponse();
-        response.setProduct(productsService.findByTitle(request.getTitle()));
+    public GetProductByIdResponse getProductByName(@RequestPayload GetProductByIdRequest request) {
+        GetProductByIdResponse response = new GetProductByIdResponse();
+        response.setProduct(productsService.findByIdSoap(request.getId()));
         return response;
     }
 

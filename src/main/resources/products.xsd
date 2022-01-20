@@ -4,10 +4,10 @@
         xmlns:tns="http://www.stortor.com/hw7/products"
         targetNamespace="http://www.stortor.com/hw7/products" elementFormDefault="qualified">
 
-    <xs:element name="getProductByTitleRequest">
+    <xs:element name="getProductByIdRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="title" type="xs:string"/>
+                <xs:element name="id" type="xs:long"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -16,7 +16,7 @@
         <xs:complexType/>
     </xs:element>
 
-    <xs:element name="getProductByTitleResponse">
+    <xs:element name="getProductByIdResponse">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="product" type="tns:product"/>

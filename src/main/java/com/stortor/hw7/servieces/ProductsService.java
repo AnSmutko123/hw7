@@ -57,8 +57,8 @@ public class ProductsService {
         return productRepository.findAll().stream().map(functionEntityToSoap).collect(Collectors.toList());
     }
 
-    public com.stortor.hw7.soap.Product findByTitle(String title) {
-        return productRepository.findByTitle(title).map(functionEntityToSoap).get();
+    public com.stortor.hw7.soap.Product findByIdSoap(Long id) {
+        return productRepository.findById(id).map(functionEntityToSoap).get();
     }
 
     public void deleteProductById(Long id) {
