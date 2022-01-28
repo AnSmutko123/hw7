@@ -1,6 +1,6 @@
 package com.stortor.spring.web.core.converters;
 
-import com.stortor.spring.web.core.dto.OrderItemDto;
+import com.stortor.spring.web.api.dto.OrderItemDto;
 import com.stortor.spring.web.core.entity.OrderItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
