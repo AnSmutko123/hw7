@@ -2,6 +2,7 @@ package com.stortor.spring.web.core.servieces;
 
 import com.stortor.spring.web.api.dto.CartDto;
 import com.stortor.spring.web.api.exceptions.ResourceNotFoundException;
+import com.stortor.spring.web.core.dto.OrderDetailsDto;
 import com.stortor.spring.web.core.entity.Order;
 import com.stortor.spring.web.core.entity.OrderItem;
 import com.stortor.spring.web.core.repositories.OrderRepository;
@@ -25,9 +26,12 @@ public class OrderService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public void createOrder(String username, Order order) {
+    public void createOrder(String username, OrderDetailsDto orderDetailsDto) {
         String cartUrl = "http://localhost:5555/cart/api/v1/cart/";
         CartDto currentCartDto = restTemplate.getForObject(cartUrl + username , CartDto.class);
+        Order order = new Order();
+        order.setAddress(orderDetailsDto.getAddress());
+        order.setPhone(orderDetailsDto.getPhone());
         order.setUsername(username);
         order.setTotalPrice(currentCartDto.getTotalPrice());
         List<OrderItem> items = currentCartDto.getItems().stream()

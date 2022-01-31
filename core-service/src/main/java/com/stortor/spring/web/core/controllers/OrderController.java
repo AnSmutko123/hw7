@@ -5,7 +5,6 @@ import com.stortor.spring.web.core.converters.OrderConverter;
 import com.stortor.spring.web.core.converters.OrderDetailsConverter;
 import com.stortor.spring.web.core.dto.OrderDetailsDto;
 import com.stortor.spring.web.core.dto.OrderDto;
-import com.stortor.spring.web.core.entity.Order;
 import com.stortor.spring.web.core.servieces.OrderService;
 import com.stortor.spring.web.core.validators.OrderValidator;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,6 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    private final OrderDetailsConverter orderDetailsConverter;
     private final OrderConverter orderConverter;
     private final OrderValidator orderValidator;
 
@@ -33,8 +31,7 @@ public class OrderController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createOrder(@RequestHeader String username, @RequestBody OrderDetailsDto orderDetailsDto) {
         orderValidator.validate(orderDetailsDto);
-        Order order = orderDetailsConverter.dtoToEntity(orderDetailsDto);
-        orderService.createOrder(username, order);
+        orderService.createOrder(username, orderDetailsDto);
     }
 
     @GetMapping()
