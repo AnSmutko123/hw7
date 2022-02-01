@@ -1,15 +1,14 @@
-package com.stortor.spring.web.core.dto;
+package com.stortor.spring.web.cart.dto;
 
-import com.stortor.spring.web.core.entity.Product;
+import com.stortor.spring.web.api.dto.OrderItemDto;
+import com.stortor.spring.web.api.dto.ProductDto;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 
-@Slf4j
 @Data
 public class Cart {
     private List<OrderItemDto> items;
@@ -19,11 +18,11 @@ public class Cart {
         this.items = new ArrayList<>();
     }
 
-    public void add(Product product) {
-        if (add(product.getId())) {
+    public void add(ProductDto productDto) {
+        if (add(productDto.getId())) {
             return;
         }
-        items.add(new OrderItemDto(product));
+        items.add(new OrderItemDto(productDto));
         recalculate();
     }
 

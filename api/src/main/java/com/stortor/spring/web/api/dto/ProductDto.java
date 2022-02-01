@@ -1,4 +1,4 @@
-package com.stortor.spring.web.core.dto;
+package com.stortor.spring.web.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

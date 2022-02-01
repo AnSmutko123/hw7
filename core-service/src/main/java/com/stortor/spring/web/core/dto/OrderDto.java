@@ -1,6 +1,7 @@
 package com.stortor.spring.web.core.dto;
 
 
+import com.stortor.spring.web.api.dto.OrderItemDto;
 import lombok.Data;
 
 import java.util.List;

@@ -1,13 +1,16 @@
 package com.stortor.spring.web.core.servieces;
 
+import com.stortor.spring.web.api.dto.CartDto;
 import com.stortor.spring.web.api.exceptions.ResourceNotFoundException;
-import com.stortor.spring.web.core.dto.Cart;
+import com.stortor.spring.web.core.dto.OrderDetailsDto;
 import com.stortor.spring.web.core.entity.Order;
 import com.stortor.spring.web.core.entity.OrderItem;
 import com.stortor.spring.web.core.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,15 +21,20 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final CartService cartService;
     private final ProductsService productService;
 
-    public void createOrder(String username, Order order) {
-        String cartKey = cartService.getCartUuidFromSuffix(username);
-        Cart currentCart = cartService.getCurrentCart(cartKey);
+    @Autowired
+    private RestTemplate restTemplate;
+
+    public void createOrder(String username, OrderDetailsDto orderDetailsDto) {
+        String cartUrl = "http://localhost:5555/cart/api/v1/cart/";
+        CartDto currentCartDto = restTemplate.getForObject(cartUrl + username , CartDto.class);
+        Order order = new Order();
+        order.setAddress(orderDetailsDto.getAddress());
+        order.setPhone(orderDetailsDto.getPhone());
         order.setUsername(username);
-        order.setTotalPrice(currentCart.getTotalPrice());
-        List<OrderItem> items = currentCart.getItems().stream()
+        order.setTotalPrice(currentCartDto.getTotalPrice());
+        List<OrderItem> items = currentCartDto.getItems().stream()
                 .map(orderItemDto -> {
                     OrderItem item = new OrderItem();
                     item.setOrder(order);
@@ -38,7 +46,7 @@ public class OrderService {
                 }).collect(Collectors.toList());
         order.setItems(items);
         orderRepository.save(order);
-        cartService.clearCart(cartKey);
+        restTemplate.getForObject(cartUrl + username + "/clear" , CartDto.class);
     }
 
     public List<Order> findOrdersByUsername(String username) {

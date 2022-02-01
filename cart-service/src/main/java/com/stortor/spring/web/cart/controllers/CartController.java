@@ -1,15 +1,13 @@
-package com.stortor.spring.web.core.controllers;
+package com.stortor.spring.web.cart.controllers;
 
+import com.stortor.spring.web.api.dto.CartDto;
 import com.stortor.spring.web.api.dto.StringResponse;
-import com.stortor.spring.web.core.dto.Cart;
-import com.stortor.spring.web.core.servieces.CartService;
+import com.stortor.spring.web.cart.dto.Cart;
+import com.stortor.spring.web.cart.services.CartService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 
-@Slf4j
 @RequestMapping("/api/v1/cart")
 @RestController
 @RequiredArgsConstructor
@@ -18,8 +16,9 @@ public class CartController {
     private final CartService cartService;
 
     @GetMapping("/{uuid}")
-    public Cart getCart(@RequestHeader(required = false) String username, @PathVariable String uuid) {
-        return cartService.getCurrentCart(getCurrentCartUuid(username, uuid));
+    public CartDto getCart(@RequestHeader(required = false) String username, @PathVariable String uuid) {
+        Cart cart = cartService.getCurrentCart(getCurrentCartUuid(username, uuid));
+        return new CartDto(cart.getItems(), cart.getTotalPrice());
     }
 
     @GetMapping("/generate")
@@ -53,6 +52,11 @@ public class CartController {
                 getCurrentCartUuid(username, null),
                 getCurrentCartUuid(null, uuid)
         );
+    }
+
+    @GetMapping
+    public String getCartUuidFromSuffix(String suffix) {
+        return cartService.getCartUuidFromSuffix(suffix);
     }
 
     private String getCurrentCartUuid(String username, String uuid) {
