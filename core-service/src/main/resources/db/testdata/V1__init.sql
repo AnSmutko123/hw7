@@ -26,25 +26,7 @@ values ('Молочные продукты'),
 insert into products (title, price, category_id)
 values ('Milk', 70, 1),
        ('Water', 30, 1),
-       ('Bread', 40, 1),
-       ('Apples', 100, 1),
-       ('Oranges', 120, 1),
-       ('Lamb', 300, 2),
-       ('Chicken', 200, 3),
-       ('Banana', 150, 1),
-       ('Tomato', 160, 3),
-       ('Chocolate', 50, 2),
-       ('Sugar', 50, 1),
-       ('Salt', 30, 3),
-       ('Cookies', 90, 1),
-       ('Cucumber', 100, 1),
-       ('Coffee', 95, 1),
-       ('Tea', 50, 2),
-       ('Butter', 200, 2),
-       ('Potato', 50, 1),
-       ('Oil', 90, 1),
-       ('Onion', 40, 3);
-
+       ('Bread', 40, 1);
 
 drop table orders if exists cascade;
 create table orders
@@ -73,4 +55,8 @@ create table order_items
 );
 
 insert into orders (username, total_price, address, phone)
-values ('user1', 200, 'address', '46545');
+values ('Alice', 200, 'address', '46545');
+
+insert into order_items (product_id, category_id, order_id, quantity, price_per_product, price)
+values (1, 1, 1, 3, 30, 90),
+       (2, 2, 1, 2, 20, 40);
