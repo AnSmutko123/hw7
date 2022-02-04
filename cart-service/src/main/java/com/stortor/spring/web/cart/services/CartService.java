@@ -1,7 +1,9 @@
 package com.stortor.spring.web.cart.services;
 
-import com.stortor.spring.web.api.dto.ProductDto;
-import com.stortor.spring.web.cart.dto.Cart;
+import com.stortor.spring.web.api.core.ProductDto;
+import com.stortor.spring.web.api.exceptions.ResourceNotFoundException;
+import com.stortor.spring.web.cart.integrations.ProductsServiceIntegration;
+import com.stortor.spring.web.cart.model.Cart;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +19,7 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class CartService {
 
+    private final ProductsServiceIntegration productsServiceIntegration;
     private final RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
@@ -41,7 +44,7 @@ public class CartService {
     }
 
     public void addToCart(String cartKey, Long productId) {
-        ProductDto productDto = restTemplate.getForObject("http://localhost:5555/core/api/v1/products/" + productId, ProductDto.class);
+        ProductDto productDto = productsServiceIntegration.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found, id = " + productId));
         execute(cartKey, c -> {
             c.add(productDto);
         });

@@ -1,10 +1,12 @@
 package com.stortor.spring.web.cart.controllers;
 
-import com.stortor.spring.web.api.dto.CartDto;
+import com.stortor.spring.web.api.carts.CartDto;
 import com.stortor.spring.web.api.dto.StringResponse;
-import com.stortor.spring.web.cart.dto.Cart;
+import com.stortor.spring.web.cart.converterts.CartConverter;
+import com.stortor.spring.web.cart.model.Cart;
 import com.stortor.spring.web.cart.services.CartService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -14,11 +16,12 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
 
     private final CartService cartService;
+    private final CartConverter cartConverter;
 
     @GetMapping("/{uuid}")
     public CartDto getCart(@RequestHeader(required = false) String username, @PathVariable String uuid) {
         Cart cart = cartService.getCurrentCart(getCurrentCartUuid(username, uuid));
-        return new CartDto(cart.getItems(), cart.getTotalPrice());
+        return cartConverter.modelToDto(cart);
     }
 
     @GetMapping("/generate")
@@ -47,7 +50,7 @@ public class CartController {
     }
 
     @GetMapping("/{uuid}/merge")
-    public void merge(@RequestHeader(required = false) String username, @PathVariable String uuid) {
+    public void merge(@RequestHeader String username, @PathVariable String uuid) {
         cartService.merge(
                 getCurrentCartUuid(username, null),
                 getCurrentCartUuid(null, uuid)

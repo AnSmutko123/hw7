@@ -2,7 +2,7 @@ package com.stortor.spring.web.core.controllers;
 
 import com.stortor.spring.web.api.exceptions.ResourceNotFoundException;
 import com.stortor.spring.web.core.converters.ProductConverter;
-import com.stortor.spring.web.api.dto.ProductDto;
+import com.stortor.spring.web.api.core.ProductDto;
 import com.stortor.spring.web.core.entity.Product;
 import com.stortor.spring.web.core.servieces.ProductsService;
 import com.stortor.spring.web.core.validators.ProductValidator;

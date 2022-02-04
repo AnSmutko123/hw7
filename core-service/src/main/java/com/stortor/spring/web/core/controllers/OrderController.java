@@ -2,9 +2,8 @@ package com.stortor.spring.web.core.controllers;
 
 
 import com.stortor.spring.web.core.converters.OrderConverter;
-import com.stortor.spring.web.core.converters.OrderDetailsConverter;
-import com.stortor.spring.web.core.dto.OrderDetailsDto;
-import com.stortor.spring.web.core.dto.OrderDto;
+import com.stortor.spring.web.api.core.OrderDetailsDto;
+import com.stortor.spring.web.api.core.OrderDto;
 import com.stortor.spring.web.core.servieces.OrderService;
 import com.stortor.spring.web.core.validators.OrderValidator;
 import lombok.RequiredArgsConstructor;

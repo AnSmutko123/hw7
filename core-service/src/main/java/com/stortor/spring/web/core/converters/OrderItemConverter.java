@@ -1,6 +1,6 @@
 package com.stortor.spring.web.core.converters;
 
-import com.stortor.spring.web.api.dto.OrderItemDto;
+import com.stortor.spring.web.api.core.OrderItemDto;
 import com.stortor.spring.web.core.entity.OrderItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +15,8 @@ public class OrderItemConverter {
         throw new UnsupportedOperationException();
     }
 
-
     public OrderItemDto entityToDto(OrderItem orderItem) {
+
         return new OrderItemDto(
                 orderItem.getProduct().getId(),
                 orderItem.getProduct().getTitle(),
