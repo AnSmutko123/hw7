@@ -1,16 +1,16 @@
 package com.stortor.spring.web.core.servieces;
 
-import com.stortor.spring.web.api.dto.CartDto;
+import com.stortor.spring.web.api.carts.CartDto;
 import com.stortor.spring.web.api.exceptions.ResourceNotFoundException;
-import com.stortor.spring.web.core.dto.OrderDetailsDto;
+import com.stortor.spring.web.api.core.OrderDetailsDto;
 import com.stortor.spring.web.core.entity.Order;
 import com.stortor.spring.web.core.entity.OrderItem;
+import com.stortor.spring.web.core.integrations.CartServiceIntegration;
 import com.stortor.spring.web.core.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,13 +22,11 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductsService productService;
+    private final CartServiceIntegration cartServiceIntegration;
 
-    @Autowired
-    private RestTemplate restTemplate;
 
     public void createOrder(String username, OrderDetailsDto orderDetailsDto) {
-        String cartUrl = "http://localhost:5555/cart/api/v1/cart/";
-        CartDto currentCartDto = restTemplate.getForObject(cartUrl + username , CartDto.class);
+        CartDto currentCartDto = cartServiceIntegration.getUserCart(username);
         Order order = new Order();
         order.setAddress(orderDetailsDto.getAddress());
         order.setPhone(orderDetailsDto.getPhone());
@@ -46,7 +44,7 @@ public class OrderService {
                 }).collect(Collectors.toList());
         order.setItems(items);
         orderRepository.save(order);
-        restTemplate.getForObject(cartUrl + username + "/clear" , CartDto.class);
+        cartServiceIntegration.clearUserCart(username);
     }
 
     public List<Order> findOrdersByUsername(String username) {

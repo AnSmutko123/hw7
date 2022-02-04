@@ -1,8 +1,9 @@
 package com.stortor.spring.web.core;
 
-import com.stortor.spring.web.api.dto.CartDto;
-import com.stortor.spring.web.api.dto.OrderItemDto;
-import com.stortor.spring.web.core.dto.OrderDetailsDto;
+import com.stortor.spring.web.api.carts.CartDto;
+import com.stortor.spring.web.api.carts.CartItemDto;
+import com.stortor.spring.web.api.core.OrderDetailsDto;
+import com.stortor.spring.web.api.core.OrderItemDto;
 import com.stortor.spring.web.core.entity.Category;
 import com.stortor.spring.web.core.entity.Order;
 import com.stortor.spring.web.core.entity.OrderItem;
@@ -40,13 +41,13 @@ public class OrderRepositoryTest {
         milk.setPrice(100);
         milk.setCategory(new Category());
 
-        OrderItemDto orderItemMilk = new OrderItemDto(1L, "Milk", 3, 60, 180);
-        CartDto cartDto = new CartDto(Arrays.asList(orderItemMilk), orderItemMilk.getPrice());
+        CartItemDto cartItemMilk = new CartItemDto(1L, "Milk", 3, 60, 180);
+        CartDto cartDto = new CartDto(Arrays.asList(cartItemMilk), cartItemMilk.getPrice());
         String username = "Alice";
         OrderDetailsDto orderDetailsDto = new OrderDetailsDto("Moscow", "111111");
         Order order = new Order();
         List<OrderItem> items = new ArrayList<>(Arrays.asList(
-                new OrderItem(milk, order, orderItemMilk.getQuantity(), orderItemMilk.getPricePerProduct(), orderItemMilk.getPrice())));
+                new OrderItem(milk, order, cartItemMilk.getQuantity(), cartItemMilk.getPricePerProduct(), cartItemMilk.getPrice())));
         order.setAddress(orderDetailsDto.getAddress());
         order.setPhone(orderDetailsDto.getPhone());
         order.setUsername(username);

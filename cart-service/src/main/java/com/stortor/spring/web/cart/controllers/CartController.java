@@ -1,8 +1,9 @@
 package com.stortor.spring.web.cart.controllers;
 
-import com.stortor.spring.web.api.dto.CartDto;
+import com.stortor.spring.web.api.carts.CartDto;
 import com.stortor.spring.web.api.dto.StringResponse;
-import com.stortor.spring.web.cart.dto.Cart;
+import com.stortor.spring.web.cart.converterts.CartConverter;
+import com.stortor.spring.web.cart.model.Cart;
 import com.stortor.spring.web.cart.services.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +16,12 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
 
     private final CartService cartService;
+    private final CartConverter cartConverter;
 
     @GetMapping("/{uuid}")
     public CartDto getCart(@RequestHeader(required = false) String username, @PathVariable String uuid) {
         Cart cart = cartService.getCurrentCart(getCurrentCartUuid(username, uuid));
-        return new CartDto(cart.getItems(), cart.getTotalPrice());
+        return cartConverter.modelToDto(cart);
     }
 
     @GetMapping("/generate")
@@ -28,36 +30,31 @@ public class CartController {
     }
 
     @GetMapping("/{uuid}/add/{productId}")
-    public ResponseEntity<?> add(@RequestHeader(required = false) String username, @PathVariable String uuid, @PathVariable Long productId) {
+    public void add(@RequestHeader(required = false) String username, @PathVariable String uuid, @PathVariable Long productId) {
         cartService.addToCart(getCurrentCartUuid(username, uuid), productId);
-        return (ResponseEntity<?>) ResponseEntity.ok();
     }
 
     @GetMapping("/{uuid}/decrement/{productId}")
-    public ResponseEntity<?> decrement(@RequestHeader(required = false) String username, @PathVariable String uuid, @PathVariable Long productId) {
+    public void decrement(@RequestHeader(required = false) String username, @PathVariable String uuid, @PathVariable Long productId) {
         cartService.decrementItem(getCurrentCartUuid(username, uuid), productId);
-        return (ResponseEntity<?>) ResponseEntity.ok();
     }
 
     @GetMapping("/{uuid}/remove/{productId}")
-    public ResponseEntity<?> remove(@RequestHeader(required = false) String username, @PathVariable String uuid, @PathVariable Long productId) {
+    public void remove(@RequestHeader(required = false) String username, @PathVariable String uuid, @PathVariable Long productId) {
         cartService.removeItemFromCart(getCurrentCartUuid(username, uuid), productId);
-        return (ResponseEntity<?>) ResponseEntity.ok();
     }
 
     @GetMapping("/{uuid}/clear")
-    public ResponseEntity<?> clear(@RequestHeader(required = false) String username, @PathVariable String uuid) {
+    public void clear(@RequestHeader(required = false) String username, @PathVariable String uuid) {
         cartService.clearCart(getCurrentCartUuid(username, uuid));
-        return (ResponseEntity<?>) ResponseEntity.ok();
     }
 
     @GetMapping("/{uuid}/merge")
-    public ResponseEntity<?> merge(@RequestHeader String username, @PathVariable String uuid) {
+    public void merge(@RequestHeader String username, @PathVariable String uuid) {
         cartService.merge(
                 getCurrentCartUuid(username, null),
                 getCurrentCartUuid(null, uuid)
         );
-        return (ResponseEntity<?>) ResponseEntity.ok();
     }
 
     @GetMapping

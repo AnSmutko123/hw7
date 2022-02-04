@@ -1,11 +1,9 @@
 package com.stortor.spring.web.api.exceptions;
 
-import lombok.Data;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
 public class ValidationException extends RuntimeException{
 
     private List<String> errorFieldsMessages;
@@ -16,5 +14,13 @@ public class ValidationException extends RuntimeException{
 
     public ValidationException(String message) {
         super(message);
+    }
+
+    public List<String> getErrorFieldsMessages() {
+        return errorFieldsMessages;
+    }
+
+    public void setErrorFieldsMessages(List<String> errorFieldsMessages) {
+        this.errorFieldsMessages = errorFieldsMessages;
     }
 }

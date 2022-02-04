@@ -1,6 +1,6 @@
 package com.stortor.spring.web.cart;
 
-import com.stortor.spring.web.api.dto.ProductDto;
+import com.stortor.spring.web.api.core.ProductDto;
 import com.stortor.spring.web.cart.services.CartService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

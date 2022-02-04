@@ -1,7 +1,7 @@
 package com.stortor.spring.web.core.validators;
 
 import com.stortor.spring.web.api.exceptions.ValidationException;
-import com.stortor.spring.web.core.dto.OrderDetailsDto;
+import com.stortor.spring.web.api.core.OrderDetailsDto;
 import com.stortor.spring.web.core.entity.OrderItem;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
