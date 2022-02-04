@@ -22,9 +22,6 @@ public class CartService {
     private final ProductsServiceIntegration productsServiceIntegration;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    @Autowired
-    private RestTemplate restTemplate;
-
     @Value("${utils.cart.prefix}")
     private String cartPrefix;
 
