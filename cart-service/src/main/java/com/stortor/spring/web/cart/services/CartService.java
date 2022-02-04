@@ -2,6 +2,7 @@ package com.stortor.spring.web.cart.services;
 
 import com.stortor.spring.web.api.core.ProductDto;
 import com.stortor.spring.web.api.exceptions.ResourceNotFoundException;
+import com.stortor.spring.web.cart.integrations.AnalyticsProductsIntegration;
 import com.stortor.spring.web.cart.integrations.ProductsServiceIntegration;
 import com.stortor.spring.web.cart.model.Cart;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.function.Consumer;
 public class CartService {
 
     private final ProductsServiceIntegration productsServiceIntegration;
+    private final AnalyticsProductsIntegration analyticsProductsIntegration;
     private final RedisTemplate<String, Object> redisTemplate;
 
     @Value("${utils.cart.prefix}")
@@ -42,6 +44,7 @@ public class CartService {
 
     public void addToCart(String cartKey, Long productId) {
         ProductDto productDto = productsServiceIntegration.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found, id = " + productId));
+        analyticsProductsIntegration.sendToAnalytics(productDto);
         execute(cartKey, c -> {
             c.add(productDto);
         });

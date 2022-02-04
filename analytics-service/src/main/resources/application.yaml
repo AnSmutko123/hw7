@@ -1,7 +1,7 @@
 server:
-  port: 8189
+  port: 8133
   servlet:
-    context-path: /web-market-core
+    context-path: /web-market-analytics
 spring:
   datasource:
     driver-class-name: org.h2.Driver
@@ -19,7 +19,8 @@ spring:
       settings:
         web-allow-others: false
 integrations:
-  cart-service:
-    url: http://localhost:5555/cart
-  analytics-service:
-    url: http://localhost:5555/analytics
+  core-service:
+    url: http://localhost:5555/core
+#integrations:
+#  core-service:
+#    url: http://localhost:5555/core

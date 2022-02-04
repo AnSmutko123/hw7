@@ -1,4 +1,4 @@
-package com.stortor.spring.web.cart.configs;
+package com.stortor.spring.web.analytics.configs;
 
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
@@ -11,7 +11,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.tcp.TcpClient;
 
-
 import java.util.concurrent.TimeUnit;
 
 // Добавить микросервис рекомендаций
@@ -22,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class AppConfig {
     @Value("${integrations.core-service.url}")
-    private String coreServiceUrl;
+    private String cartServiceUrl;
 
     @Bean
     public WebClient cartServiceWebClient() {
@@ -36,23 +35,8 @@ public class AppConfig {
 
         return WebClient
                 .builder()
-                .baseUrl(coreServiceUrl)
+                .baseUrl(cartServiceUrl)
                 .clientConnector(new ReactorClientHttpConnector(HttpClient.from(tcpClient)))
                 .build();
     }
-
-    @Value("${integrations.analytics-service.url}")
-    private String analyticsProductsServiceUrl;
-
-    @Bean
-    public void analyticsProductsServiceWebClient() {
-        WebClient
-                .builder()
-                .baseUrl(analyticsProductsServiceUrl)
-                .build();
-    }
-
-
-
-
 }

@@ -8,3 +8,5 @@ utils:
 integrations:
   core-service:
     url: http://localhost:5555/core
+  analytics-service:
+    url: http://localhost:5555/analytics

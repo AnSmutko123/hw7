@@ -1,10 +1,14 @@
 package com.stortor.spring.web.core.servieces;
 
 import com.stortor.spring.web.api.carts.CartDto;
+import com.stortor.spring.web.api.core.ProductDto;
 import com.stortor.spring.web.api.exceptions.ResourceNotFoundException;
 import com.stortor.spring.web.api.core.OrderDetailsDto;
+import com.stortor.spring.web.core.converters.ProductConverter;
 import com.stortor.spring.web.core.entity.Order;
 import com.stortor.spring.web.core.entity.OrderItem;
+import com.stortor.spring.web.core.entity.Product;
+import com.stortor.spring.web.core.integrations.AnalyticsProductsIntegration;
 import com.stortor.spring.web.core.integrations.CartServiceIntegration;
 import com.stortor.spring.web.core.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +27,8 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductsService productService;
     private final CartServiceIntegration cartServiceIntegration;
+    private final AnalyticsProductsIntegration analyticsProductsIntegration;
+    private final ProductConverter productConverter;
 
 
     public void createOrder(String username, OrderDetailsDto orderDetailsDto) {
@@ -34,12 +40,14 @@ public class OrderService {
         order.setTotalPrice(currentCartDto.getTotalPrice());
         List<OrderItem> items = currentCartDto.getItems().stream()
                 .map(orderItemDto -> {
+                    Product product = productService.findById(orderItemDto.getProductId()).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
                     OrderItem item = new OrderItem();
                     item.setOrder(order);
                     item.setQuantity(orderItemDto.getQuantity());
                     item.setPricePerProduct(orderItemDto.getPricePerProduct());
                     item.setPrice(orderItemDto.getPrice());
-                    item.setProduct(productService.findById(orderItemDto.getProductId()).orElseThrow(() -> new ResourceNotFoundException("Product not found")));
+                    item.setProduct(product);
+                    analyticsProductsIntegration.sendToAnalytics(productConverter.entityToDto(product));
                     return item;
                 }).collect(Collectors.toList());
         order.setItems(items);
