@@ -25,7 +25,7 @@ public class AnalyticsProductsIntegration {
     public void sendToAnalytics(ProductDto productDto) {
         ProductAnalyticsDto productAnalyticsDto = new ProductAnalyticsDto(productDto.getId(), productDto.getTitle(), null, new Date());
         analyticsProductsServiceWebClient.post()
-                .uri(analyticsProductsServiceUrl + "/api/v1/products_analytics/add")
+                .uri(analyticsProductsServiceUrl + "/api/v1/products_analytics")
                 .syncBody(productAnalyticsDto)
                 .retrieve()
                 .bodyToMono(ProductDto.class)

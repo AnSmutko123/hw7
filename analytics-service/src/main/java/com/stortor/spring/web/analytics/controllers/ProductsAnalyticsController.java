@@ -34,17 +34,10 @@ public class ProductsAnalyticsController {
         return productDtos;
     }
 
-    @PostMapping("/add")
+    @PostMapping()
     public void addProductAnalytics(@RequestBody ProductAnalyticsDto analyticsProductDto) {
         productsAnalyticsService.addToCartProducts(analyticsProductDto);
     }
-
-    @PostMapping("/bought")
-    public void boughtProductsAnalytics(@RequestBody ProductAnalyticsDto analyticsProductDto) {
-        productsAnalyticsService.addToCartProducts(analyticsProductDto);
-    }
-
-
 
 
 }

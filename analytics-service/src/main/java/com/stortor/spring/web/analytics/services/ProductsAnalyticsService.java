@@ -21,6 +21,8 @@ public class ProductsAnalyticsService {
 
     private final ProductsAnalyticsRepository productsAnalyticsRepository;
     private final ProductAnalyticsConverter converter;
+
+    // не знаю правильно ли тут использую лист, но мне показалось, что одного финального листа, который создается один раз для наших задач будет достаточно
     private final List<ProductsAnalytics> analyticsList = new ArrayList<>();
 
     public void addToCartProducts(ProductAnalyticsDto analyticsProductDto) {
@@ -29,7 +31,7 @@ public class ProductsAnalyticsService {
     }
 
     // для того чтобы не дергать бд по каждому запросу на добавление продукта
-    // кешируем по 10 обьектов
+    // по таймеру отправляем в бд
     @Transactional
     @Scheduled(fixedRate = 30000)
     public void addAnalyticsProductsToBd() {
