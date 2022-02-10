@@ -5,14 +5,18 @@ import com.stortor.spring.web.analytics.entities.ProductsAnalytics;
 import com.stortor.spring.web.analytics.repositories.ProductsAnalyticsRepository;
 import com.stortor.spring.web.api.analytics.ProductAnalyticsDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductsAnalyticsService {
 
     private final ProductsAnalyticsRepository productsAnalyticsRepository;
@@ -21,24 +25,17 @@ public class ProductsAnalyticsService {
 
     public void addToCartProducts(ProductAnalyticsDto analyticsProductDto) {
         ProductsAnalytics productsAnalytics = converter.dtoToEntity(analyticsProductDto);
-        System.out.println(productsAnalytics);
         analyticsList.add(productsAnalytics);
-        if (analyticsList.size() > 10) {
-            addAnalyticsProductsToBd(analyticsList);
-            analyticsList.clear();
-        }
-    }
-
-    @Transactional
-    public void boughtProducts(List<ProductAnalyticsDto> analyticsProductDto) {
-        analyticsProductDto.stream().map(i -> converter.dtoToEntity(i)).forEach(i -> productsAnalyticsRepository.save(i));
     }
 
     // для того чтобы не дергать бд по каждому запросу на добавление продукта
     // кешируем по 10 обьектов
     @Transactional
-    public void addAnalyticsProductsToBd(List<ProductsAnalytics> analyticsList) {
+    @Scheduled(fixedRate = 30000)
+    public void addAnalyticsProductsToBd() {
         analyticsList.stream().forEach(i -> productsAnalyticsRepository.save(i));
+        analyticsList.clear();
+        log.info(String.valueOf(new Date()));
     }
 
     public List<Long> getTheMostPutToCartProductsPerDay() {
