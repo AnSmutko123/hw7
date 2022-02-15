@@ -4,15 +4,13 @@ import com.stortor.spring.web.api.analytics.ProductAnalyticsDto;
 import com.stortor.spring.web.api.core.ProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
-import redis.clients.jedis.Response;
 
-import java.time.Duration;
 import java.util.Date;
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Component
 @RequiredArgsConstructor
@@ -22,13 +20,14 @@ public class AnalyticsProductsIntegration {
     @Value("${integrations.analytics-service.url}")
     private String analyticsProductsServiceUrl;
 
-    public void sendToAnalytics(ProductDto productDto) {
-        ProductAnalyticsDto productAnalyticsDto = new ProductAnalyticsDto(productDto.getId(), productDto.getTitle(), null, new Date());
+    public void sendToAnalytics(List<ProductDto> productDtoList) {
+        List<ProductAnalyticsDto> productAnalyticsDto = productDtoList.stream()
+                .map(p -> new ProductAnalyticsDto(p.getId(), p.getTitle(), null, new Date())).collect(Collectors.toList());
         analyticsProductsServiceWebClient.post()
                 .uri(analyticsProductsServiceUrl + "/api/v1/products_analytics")
                 .syncBody(productAnalyticsDto)
                 .retrieve()
-                .bodyToMono(ProductDto.class)
+                .bodyToMono(List.class)
                 .block();
     }
 

@@ -13,6 +13,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,22 +23,14 @@ public class ProductsAnalyticsService {
     private final ProductsAnalyticsRepository productsAnalyticsRepository;
     private final ProductAnalyticsConverter converter;
 
-    // не знаю правильно ли тут использую лист, но мне показалось, что одного финального листа, который создается один раз для наших задач будет достаточно
-    private final List<ProductsAnalytics> analyticsList = new ArrayList<>();
-
-    public void addToCartProducts(ProductAnalyticsDto analyticsProductDto) {
-        ProductsAnalytics productsAnalytics = converter.dtoToEntity(analyticsProductDto);
-        analyticsList.add(productsAnalytics);
+    public void addToCartProducts(List<ProductAnalyticsDto> analyticsProductDto) {
+        List<ProductsAnalytics> productsAnalytics = analyticsProductDto.stream().map(p -> converter.dtoToEntity(p)).collect(Collectors.toList());
+        addAnalyticsProductsToBd(productsAnalytics);
     }
 
-    // для того чтобы не дергать бд по каждому запросу на добавление продукта
-    // по таймеру отправляем в бд
     @Transactional
-    @Scheduled(fixedRate = 30000)
-    public void addAnalyticsProductsToBd() {
-        analyticsList.stream().forEach(i -> productsAnalyticsRepository.save(i));
-        analyticsList.clear();
-        log.info(String.valueOf(new Date()));
+    public void addAnalyticsProductsToBd(List<ProductsAnalytics> productsAnalytics) {
+        productsAnalytics.stream().forEach(p -> productsAnalyticsRepository.save(p));
     }
 
     public List<Long> getTheMostPutToCartProductsPerDay() {

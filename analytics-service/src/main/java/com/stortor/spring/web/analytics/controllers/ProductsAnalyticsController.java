@@ -35,7 +35,7 @@ public class ProductsAnalyticsController {
     }
 
     @PostMapping()
-    public void addProductAnalytics(@RequestBody ProductAnalyticsDto analyticsProductDto) {
+    public void addProductAnalytics(@RequestBody List<ProductAnalyticsDto> analyticsProductDto) {
         productsAnalyticsService.addToCartProducts(analyticsProductDto);
     }
 

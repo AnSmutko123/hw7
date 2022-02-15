@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,7 @@ public class OrderService {
         order.setPhone(orderDetailsDto.getPhone());
         order.setUsername(username);
         order.setTotalPrice(currentCartDto.getTotalPrice());
+        List<ProductDto> productDtoList = new ArrayList<>();
         List<OrderItem> items = currentCartDto.getItems().stream()
                 .map(orderItemDto -> {
                     Product product = productService.findById(orderItemDto.getProductId()).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
@@ -47,9 +49,10 @@ public class OrderService {
                     item.setPricePerProduct(orderItemDto.getPricePerProduct());
                     item.setPrice(orderItemDto.getPrice());
                     item.setProduct(product);
-                    analyticsProductsIntegration.sendToAnalytics(productConverter.entityToDto(product));
+                    productDtoList.add(productConverter.entityToDto(product));
                     return item;
                 }).collect(Collectors.toList());
+        analyticsProductsIntegration.sendToAnalytics(productDtoList);
         order.setItems(items);
         orderRepository.save(order);
         cartServiceIntegration.clearUserCart(username);

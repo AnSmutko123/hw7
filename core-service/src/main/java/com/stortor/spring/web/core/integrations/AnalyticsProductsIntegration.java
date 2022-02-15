@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -17,13 +19,14 @@ public class AnalyticsProductsIntegration {
     @Value("${integrations.analytics-service.url}")
     private String analyticsProductsServiceUrl;
 
-    public void sendToAnalytics(ProductDto productDto) {
-        ProductAnalyticsDto productAnalyticsDto = new ProductAnalyticsDto(productDto.getId(), productDto.getTitle(), new Date(), null);
+    public void sendToAnalytics(List<ProductDto> productDtoList) {
+        List<ProductAnalyticsDto> productAnalyticsDto = productDtoList.stream()
+                .map(p -> new ProductAnalyticsDto(p.getId(), p.getTitle(), new Date(), null)).collect(Collectors.toList());
         analyticsProductsServiceWebClient.post()
                 .uri(analyticsProductsServiceUrl + "/api/v1/products_analytics")
                 .syncBody(productAnalyticsDto)
                 .retrieve()
-                .bodyToMono(ProductDto.class)
+                .bodyToMono(List.class)
                 .block();
     }
 
