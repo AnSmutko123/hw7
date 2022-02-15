@@ -22,6 +22,7 @@ public class ProductsAnalyticsService {
 
     private final ProductsAnalyticsRepository productsAnalyticsRepository;
     private final ProductAnalyticsConverter converter;
+    private final List<ProductsAnalytics> analyticsList = new ArrayList<>();
 
     public void addToCartProducts(List<ProductAnalyticsDto> analyticsProductDto) {
         List<ProductsAnalytics> productsAnalytics = analyticsProductDto.stream().map(p -> converter.dtoToEntity(p)).collect(Collectors.toList());
@@ -30,7 +31,14 @@ public class ProductsAnalyticsService {
 
     @Transactional
     public void addAnalyticsProductsToBd(List<ProductsAnalytics> productsAnalytics) {
-        productsAnalytics.stream().forEach(p -> productsAnalyticsRepository.save(p));
+        analyticsList.addAll(productsAnalytics);
+    }
+
+    @Transactional
+    @Scheduled(fixedRate = 30000)
+    public void addAnalyticsProductsToBd() {
+        analyticsList.stream().forEach(i -> productsAnalyticsRepository.save(i));
+        analyticsList.clear();
     }
 
     public List<Long> getTheMostPutToCartProductsPerDay() {
