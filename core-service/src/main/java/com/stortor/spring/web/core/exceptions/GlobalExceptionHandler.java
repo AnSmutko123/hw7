@@ -1,6 +1,8 @@
 package com.stortor.spring.web.core.exceptions;
 
-import com.stortor.spring.web.api.exceptions.AppError;
+import com.stortor.spring.web.api.errors.AppError;
+import com.stortor.spring.web.api.errors.ServerNotWorkingError;
+import com.stortor.spring.web.api.exceptions.ServerNotWorkingException;
 import com.stortor.spring.web.api.exceptions.ResourceNotFoundException;
 import com.stortor.spring.web.api.exceptions.ValidationException;
 import lombok.extern.slf4j.Slf4j;
@@ -22,5 +24,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<FieldsValidationError> catchValidationException(ValidationException e) {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new FieldsValidationError(e.getErrorFieldsMessages()),HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ServerNotWorkingError> catchServerNotWorkingException(ServerNotWorkingException e) {
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new ServerNotWorkingError(HttpStatus.REQUEST_TIMEOUT.value(), e.getMessage()),HttpStatus.REQUEST_TIMEOUT);
     }
 }

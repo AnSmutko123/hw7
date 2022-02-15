@@ -6,6 +6,7 @@ import com.stortor.spring.web.cart.converterts.CartConverter;
 import com.stortor.spring.web.cart.model.Cart;
 import com.stortor.spring.web.cart.services.CartService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -29,8 +30,8 @@ public class CartController {
     }
 
     @GetMapping("/{uuid}/add/{productId}")
-    public void add(@RequestHeader(required = false) String username, @PathVariable String uuid, @PathVariable Long productId) {
-        cartService.addToCart(getCurrentCartUuid(username, uuid), productId);
+    public ResponseEntity<?> add(@RequestHeader(required = false) String username, @PathVariable String uuid, @PathVariable Long productId) {
+        return cartService.addToCart(getCurrentCartUuid(username, uuid), productId);
     }
 
     @GetMapping("/{uuid}/decrement/{productId}")

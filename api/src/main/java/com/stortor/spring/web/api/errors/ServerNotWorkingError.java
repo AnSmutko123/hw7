@@ -1,16 +1,15 @@
-package com.stortor.spring.web.api.exceptions;
+package com.stortor.spring.web.api.errors;
 
-
-public class AppError {
+public class ServerNotWorkingError {
     private int statusCode;
     private String message;
 
-    public AppError(int statusCode, String message) {
+    public ServerNotWorkingError(int statusCode, String message) {
         this.statusCode = statusCode;
         this.message = message;
     }
 
-    public AppError() {
+    public ServerNotWorkingError() {
     }
 
     public int getStatusCode() {

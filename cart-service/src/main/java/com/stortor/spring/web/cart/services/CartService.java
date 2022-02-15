@@ -1,7 +1,10 @@
 package com.stortor.spring.web.cart.services;
 
 import com.stortor.spring.web.api.core.ProductDto;
+import com.stortor.spring.web.api.errors.AppError;
+import com.stortor.spring.web.api.errors.ServerNotWorkingError;
 import com.stortor.spring.web.api.exceptions.ResourceNotFoundException;
+import com.stortor.spring.web.api.exceptions.ServerNotWorkingException;
 import com.stortor.spring.web.cart.integrations.AnalyticsProductsIntegration;
 import com.stortor.spring.web.cart.integrations.ProductsServiceIntegration;
 import com.stortor.spring.web.cart.model.Cart;
@@ -10,15 +13,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 @Service
@@ -50,12 +54,19 @@ public class CartService {
         return (Cart) redisTemplate.opsForValue().get(cartKey);
     }
 
-    public void addToCart(String cartKey, Long productId) {
-        ProductDto productDto = productsServiceIntegration.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found, id = " + productId));
-        productDtoAnalyticsList.add(productDto);
-        execute(cartKey, c -> {
-            c.add(productDto);
-        });
+    public ResponseEntity<?> addToCart(String cartKey, Long productId) {
+        try {
+            ProductDto productDto = productsServiceIntegration.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found, id = " + productId));
+            productDtoAnalyticsList.add(productDto);
+            execute(cartKey, c -> {
+                c.add(productDto);
+            });
+        } catch (ServerNotWorkingException ex) {
+            return new ResponseEntity<>(new ServerNotWorkingError(HttpStatus.REQUEST_TIMEOUT.value(), ex.getMessage()), HttpStatus.REQUEST_TIMEOUT);
+        } catch (ResourceNotFoundException ex) {
+            return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(), ex.getMessage()), HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     // 30 sec

@@ -1,6 +1,6 @@
 package com.stortor.spring.web.auth.controllers;
 
-import com.stortor.spring.web.api.exceptions.AppError;
+import com.stortor.spring.web.api.errors.AppError;
 import com.stortor.spring.web.auth.dto.JwtRequest;
 import com.stortor.spring.web.auth.dto.JwtResponse;
 import com.stortor.spring.web.auth.services.UserService;
