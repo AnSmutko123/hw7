@@ -18,6 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,10 +39,10 @@ public class OrderRepositoryTest {
         Product milk = new Product();
         milk.setId(1L);
         milk.setTitle("Milk");
-        milk.setPrice(100);
+        milk.setPrice(BigDecimal.valueOf(100));
         milk.setCategory(new Category());
 
-        CartItemDto cartItemMilk = new CartItemDto(1L, "Milk", 3, 60, 180);
+        CartItemDto cartItemMilk = new CartItemDto(1L, "Milk", 3, BigDecimal.valueOf(60), BigDecimal.valueOf(180));
         CartDto cartDto = new CartDto(Arrays.asList(cartItemMilk), cartItemMilk.getPrice());
         String username = "Alice";
         OrderDetailsDto orderDetailsDto = new OrderDetailsDto("Moscow", "111111");

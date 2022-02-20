@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
+
 @SpringBootTest
 public class CartTest {
     @Autowired
@@ -29,19 +31,19 @@ public class CartTest {
         productDtoMilk = new ProductDto();
         productDtoMilk.setId(2L);
         productDtoMilk.setTitle("Milk");
-        productDtoMilk.setPrice(100);
+        productDtoMilk.setPrice(BigDecimal.valueOf(100));
         productDtoMilk.setCategory("X");
 
         productDtoBread = new ProductDto();
         productDtoBread.setId(4L);
         productDtoBread.setTitle("Bread");
-        productDtoBread.setPrice(150);
+        productDtoBread.setPrice(BigDecimal.valueOf(150));
         productDtoBread.setCategory("Y");
 
         productDtoApples = new ProductDto();
         productDtoApples.setId(5L);
         productDtoApples.setTitle("Apples");
-        productDtoApples.setPrice(200);
+        productDtoApples.setPrice(BigDecimal.valueOf(200));
         productDtoApples.setCategory("Y");
     }
 
@@ -62,7 +64,7 @@ public class CartTest {
         cartService.addToCart("test_cart", productDtoBread.getId());
         Assertions.assertEquals(2, cartService.getCurrentCart("test_cart").getItems().size());
 
-        int totalPrice = cartService.getCurrentCart("test_cart").getItems().stream().mapToInt(p -> p.getPrice()).sum();
+        int totalPrice = cartService.getCurrentCart("test_cart").getItems().stream().mapToInt(p -> p.getPrice().intValue()).sum();
         Assertions.assertEquals(totalPrice, cartService.getCurrentCart("test_cart").getTotalPrice());
     }
 
@@ -77,7 +79,7 @@ public class CartTest {
         cartService.decrementItem("test_cart", productDtoMilk.getId());
         Assertions.assertTrue(cartService.getCurrentCart("test_cart").getItems().isEmpty());
 
-        int totalPrice = cartService.getCurrentCart("test_cart").getItems().stream().mapToInt(p -> p.getPrice()).sum();
+        int totalPrice = cartService.getCurrentCart("test_cart").getItems().stream().mapToInt(p -> p.getPrice().intValue()).sum();
         Assertions.assertEquals(totalPrice, cartService.getCurrentCart("test_cart").getTotalPrice());
     }
 
@@ -108,7 +110,7 @@ public class CartTest {
 
         cartService.merge("user_cart", "test_cart");
         Assertions.assertEquals(3, cartService.getCurrentCart("user_cart").getItems().size());
-        int totalPrice = cartService.getCurrentCart("user_cart").getItems().stream().mapToInt(p -> p.getPrice()).sum();
+        int totalPrice = cartService.getCurrentCart("user_cart").getItems().stream().mapToInt(p -> p.getPrice().intValue()).sum();
         Assertions.assertEquals(totalPrice, cartService.getCurrentCart("user_cart").getTotalPrice());
     }
 

@@ -33,10 +33,10 @@ public class OrderValidator {
         if (orderItem.stream().map(p -> p.getQuantity()).anyMatch(q -> q < 1)) {
             errors.add("Количество товаров не может быть меньше 1");
         }
-        if (orderItem.stream().map(p -> p.getPricePerProduct()).anyMatch(q -> q < 1)) {
+        if (orderItem.stream().map(p -> p.getPricePerProduct()).anyMatch(q -> q.intValue() < 1)) {
             errors.add("Стоимость товара не может быть меньше 1");
         }
-        if (orderItem.stream().map(p -> p.getPrice()).anyMatch(q -> q < 1)) {
+        if (orderItem.stream().map(p -> p.getPrice()).anyMatch(q -> q.intValue() < 1)) {
             errors.add("Общая стоимость товаров не может быть меньше 1");
         }
         if (!errors.isEmpty()) {

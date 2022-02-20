@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Slf4j
@@ -60,7 +61,7 @@ public class ProductsService {
     @Transactional
     public Product changePrice(Long productId, Integer delta) {
         Product product = productRepository.findById(productId).orElseThrow(()-> new ResourceNotFoundException("Unable to change product's cost. Product not found, id: " + productId));
-        product.setPrice(product.getPrice() + delta);
+        product.setPrice(product.getPrice().multiply(BigDecimal.valueOf(delta)));
         return product;
     }
 

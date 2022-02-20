@@ -1,16 +1,18 @@
 package com.stortor.spring.web.api.core;
 
+import java.math.BigDecimal;
+
 public class ProductDto {
 
     private Long id;
     private String title;
-    private Integer price;
+    private BigDecimal price;
     private String category;
 
     public ProductDto() {
     }
 
-    public ProductDto(Long id, String title, Integer price, String category) {
+    public ProductDto(Long id, String title, BigDecimal price, String category) {
         this.id = id;
         this.title = title;
         this.price = price;
@@ -33,11 +35,11 @@ public class ProductDto {
         this.title = title;
     }
 
-    public Integer getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
