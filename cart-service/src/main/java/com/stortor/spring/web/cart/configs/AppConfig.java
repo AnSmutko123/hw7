@@ -1,9 +1,14 @@
 package com.stortor.spring.web.cart.configs;
 
+import com.stortor.spring.web.cart.properties.AnalyticsServiceIntegrationPropertiesTimeout;
+import com.stortor.spring.web.cart.properties.AnalyticsServiceIntegrationPropertiesUrl;
+import com.stortor.spring.web.cart.properties.CoreServiceIntegrationPropertiesTimeout;
+import com.stortor.spring.web.cart.properties.CoreServiceIntegrationPropertiesUrl;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -14,45 +19,50 @@ import reactor.netty.tcp.TcpClient;
 
 import java.util.concurrent.TimeUnit;
 
-// Добавить микросервис рекомендаций
-// - 5 наиболее покупаемых продуктов за месяц
-// - 5 наиболее складываемых продуктов в корзину за день
-// - вывести на главной странице эти рекомендации в виде текста
-
 @Configuration
+@RequiredArgsConstructor
+@EnableConfigurationProperties(
+        {AnalyticsServiceIntegrationPropertiesUrl.class, AnalyticsServiceIntegrationPropertiesTimeout.class,
+                CoreServiceIntegrationPropertiesTimeout.class, CoreServiceIntegrationPropertiesUrl.class}
+)
 public class AppConfig {
-    @Value("${integrations.core-service.url}")
-    private String coreServiceUrl;
+
+    private final AnalyticsServiceIntegrationPropertiesUrl analyticsServiceUrl;
+    private final AnalyticsServiceIntegrationPropertiesTimeout analyticsServiceTimeout;
+    private final CoreServiceIntegrationPropertiesUrl cartServiceUrl;
+    private final CoreServiceIntegrationPropertiesTimeout coreServiceTimeout;
 
     @Bean
-    public WebClient cartServiceWebClient() {
+    public WebClient coreServiceWebClient() {
         TcpClient tcpClient = TcpClient
                 .create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 2000)
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, coreServiceTimeout.getConnection())
                 .doOnConnected(connection -> {
-                    connection.addHandlerLast(new ReadTimeoutHandler(10000, TimeUnit.MILLISECONDS));
-                    connection.addHandlerLast(new WriteTimeoutHandler(2000, TimeUnit.MILLISECONDS));
+                    connection.addHandlerLast(new ReadTimeoutHandler(coreServiceTimeout.getRead(), TimeUnit.MILLISECONDS));
+                    connection.addHandlerLast(new WriteTimeoutHandler(coreServiceTimeout.getWrite(), TimeUnit.MILLISECONDS));
                 });
 
         return WebClient
                 .builder()
-                .baseUrl(coreServiceUrl)
+                .baseUrl(cartServiceUrl.getUrl())
                 .clientConnector(new ReactorClientHttpConnector(HttpClient.from(tcpClient)))
                 .build();
     }
 
-    @Value("${integrations.analytics-service.url}")
-    private String analyticsProductsServiceUrl;
-
     @Bean
-    public void analyticsProductsServiceWebClient() {
-        WebClient
+    public WebClient analyticsProductsServiceWebClient() {
+        TcpClient tcpClient = TcpClient
+                .create()
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, analyticsServiceTimeout.getConnection())
+                .doOnConnected(connection -> {
+                    connection.addHandlerLast(new ReadTimeoutHandler(analyticsServiceTimeout.getRead(), TimeUnit.MILLISECONDS));
+                    connection.addHandlerLast(new WriteTimeoutHandler(analyticsServiceTimeout.getWrite(), TimeUnit.MILLISECONDS));
+                });
+        return WebClient
                 .builder()
-                .baseUrl(analyticsProductsServiceUrl)
+                .baseUrl(analyticsServiceUrl.getUrl())
+                .clientConnector(new ReactorClientHttpConnector(HttpClient.from(tcpClient)))
                 .build();
     }
-
-
-
 
 }

@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<AppError> catchResourceNotFoundException(ResourceNotFoundException e) {
         log.error(e.getMessage(), e);
-        return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(), e.getMessage()),HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new AppError("RESOURCE_NOT_FOUND_EXCEPTION", e.getMessage()),HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
@@ -32,4 +32,12 @@ public class GlobalExceptionHandler {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new ServerNotWorkingError(HttpStatus.REQUEST_TIMEOUT.value(), e.getMessage()),HttpStatus.REQUEST_TIMEOUT);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<AppError> catchCartServiceIntegrationException(CartServiceIntegrationException e) {
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new AppError("CART_SERVICE_INTEGRATION_ERROR", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
 }

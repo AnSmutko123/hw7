@@ -8,5 +8,13 @@ utils:
 integrations:
   core-service:
     url: http://localhost:5555/core
+    timeouts:
+      connection: 10000
+      read: 2000
+      write: 2000
   analytics-service:
     url: http://localhost:5555/analytics
+    timeouts:
+      connection: 10000
+      read: 2000
+      write: 2000
