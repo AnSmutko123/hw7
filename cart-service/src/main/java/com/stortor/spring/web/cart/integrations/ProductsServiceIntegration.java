@@ -16,13 +16,10 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class ProductsServiceIntegration {
-    private final WebClient productsServiceWebClient;
-
-    @Value("${integrations.core-service.url}")
-    private String productServiceUrl;
+    private final WebClient coreServiceWebClient;
 
     public Optional<ProductDto> findById(Long id) {
-        ProductDto productDto = productsServiceWebClient.get()
+        ProductDto productDto = coreServiceWebClient.get()
                 .uri("/api/v1/products/" + id)
                 .retrieve()
                 .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new ServerNotWorkingException("Product-MS not working")))

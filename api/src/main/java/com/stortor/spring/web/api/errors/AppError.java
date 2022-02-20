@@ -2,23 +2,24 @@ package com.stortor.spring.web.api.errors;
 
 
 public class AppError {
-    private int statusCode;
+
+    private String code;
     private String message;
 
-    public AppError(int statusCode, String message) {
-        this.statusCode = statusCode;
+    public AppError(String code, String message) {
+        this.code = code;
         this.message = message;
     }
 
     public AppError() {
     }
 
-    public int getStatusCode() {
-        return statusCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getMessage() {

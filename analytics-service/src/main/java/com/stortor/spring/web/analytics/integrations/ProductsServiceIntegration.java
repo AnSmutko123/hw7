@@ -13,9 +13,6 @@ import java.util.Optional;
 public class ProductsServiceIntegration {
     private final WebClient productsServiceWebClient;
 
-    @Value("${integrations.core-service.url}")
-    private String productServiceUrl;
-
     public Optional<ProductDto> findById(Long id) {
         ProductDto productDto = productsServiceWebClient.get()
                 .uri("/api/v1/products/" + id)

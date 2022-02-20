@@ -17,14 +17,11 @@ import java.util.stream.Collectors;
 public class AnalyticsProductsIntegration {
     private final WebClient analyticsProductsServiceWebClient;
 
-    @Value("${integrations.analytics-service.url}")
-    private String analyticsProductsServiceUrl;
-
     public void sendToAnalytics(List<ProductDto> productDtoList) {
         List<ProductAnalyticsDto> productAnalyticsDto = productDtoList.stream()
                 .map(p -> new ProductAnalyticsDto(p.getId(), p.getTitle(), null, new Date())).collect(Collectors.toList());
         analyticsProductsServiceWebClient.post()
-                .uri(analyticsProductsServiceUrl + "/api/v1/products_analytics")
+                .uri("/api/v1/products_analytics")
                 .syncBody(productAnalyticsDto)
                 .retrieve()
                 .bodyToMono(List.class)
