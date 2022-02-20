@@ -16,4 +16,3 @@ values ('1', 'Milk', '0001-01-01', '0001-01-01'),
        ('3', 'Apples', '2022-02-04', '2022-02-04'),
        ('1', 'Milk', '0001-01-01', '0001-01-01');
 
--- count(p.productId) from ProductsAnalytics p

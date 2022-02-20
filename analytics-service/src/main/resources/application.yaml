@@ -21,6 +21,10 @@ spring:
 integrations:
   core-service:
     url: http://localhost:5555/core
+#    timeouts:
+#      connection: 10000
+#      read: 2000
+#      write: 2000
 #integrations:
 #  core-service:
 #    url: http://localhost:5555/core
