@@ -1,9 +1,13 @@
 package com.stortor.spring.web.api.errors;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "Модель ошибки")
 public class AppError {
 
+    @Schema(description = "Код ошибки", required = true)
     private String code;
+    @Schema(description = "Сообщение ошибки", required = true)
     private String message;
 
     public AppError(String code, String message) {

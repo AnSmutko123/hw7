@@ -1,16 +1,30 @@
 package com.stortor.spring.web.api.core;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.math.BigDecimal;
 import java.util.List;
 
+@Schema(description = "Модель заказа")
 public class OrderDto {
 
+    @Schema(description = "ID продукта", required = true, example = "1")
     private Long id;
+
+    @Schema(description = "Имя пользователя", required = true, example = "Alice")
     private String username;
+
+    @Schema(description = "Список товаров", required = true)
     private List<OrderItemDto> items;
+
+    @Schema(description = "Итоговая цена заказа", required = true, example = "800.00")
     private BigDecimal totalPrice;
+
+    @Schema(description = "Адрес доставки", required = true, example = "Moscow")
     private String address;
+
+    @Schema(description = "Номер телефона", required = true, example = "7878565464")
     private String phone;
 
     public OrderDto() {
