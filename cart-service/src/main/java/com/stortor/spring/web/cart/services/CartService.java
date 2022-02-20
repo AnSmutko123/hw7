@@ -54,19 +54,12 @@ public class CartService {
         return (Cart) redisTemplate.opsForValue().get(cartKey);
     }
 
-    public ResponseEntity<?> addToCart(String cartKey, Long productId) {
-        try {
-            ProductDto productDto = productsServiceIntegration.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found, id = " + productId));
-            productDtoAnalyticsList.add(productDto);
-            execute(cartKey, c -> {
-                c.add(productDto);
-            });
-        } catch (ServerNotWorkingException ex) {
-            return new ResponseEntity<>(new ServerNotWorkingError(HttpStatus.REQUEST_TIMEOUT.value(), ex.getMessage()), HttpStatus.REQUEST_TIMEOUT);
-        } catch (ResourceNotFoundException ex) {
-            return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(), ex.getMessage()), HttpStatus.NOT_FOUND);
-        }
-        return ResponseEntity.ok(HttpStatus.OK);
+    public void addToCart(String cartKey, Long productId) {
+        ProductDto productDto = productsServiceIntegration.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found, id = " + productId));
+        productDtoAnalyticsList.add(productDto);
+        execute(cartKey, c -> {
+            c.add(productDto);
+        });
     }
 
     // 30 sec

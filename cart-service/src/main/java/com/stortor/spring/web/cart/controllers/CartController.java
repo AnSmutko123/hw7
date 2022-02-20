@@ -30,8 +30,8 @@ public class CartController {
     }
 
     @GetMapping("/{uuid}/add/{productId}")
-    public ResponseEntity<?> add(@RequestHeader(required = false) String username, @PathVariable String uuid, @PathVariable Long productId) {
-        return cartService.addToCart(getCurrentCartUuid(username, uuid), productId);
+    public void add(@RequestHeader(required = false) String username, @PathVariable String uuid, @PathVariable Long productId) {
+        cartService.addToCart(getCurrentCartUuid(username, uuid), productId);
     }
 
     @GetMapping("/{uuid}/decrement/{productId}")
