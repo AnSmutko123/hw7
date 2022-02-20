@@ -13,11 +13,6 @@ import reactor.netty.tcp.TcpClient;
 
 import java.util.concurrent.TimeUnit;
 
-// Добавить микросервис рекомендаций
-// - 5 наиболее покупаемых продуктов за месяц
-// - 5 наиболее складываемых продуктов в корзину за день
-// - вывести на главной странице эти рекомендации в виде текста
-
 @Configuration
 public class AppConfig {
     @Value("${integrations.core-service.url}")
