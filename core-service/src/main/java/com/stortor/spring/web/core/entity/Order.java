@@ -1,5 +1,6 @@
 package com.stortor.spring.web.core.entity;
 
+import com.stortor.spring.web.core.enums.OrderStateEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,8 +32,15 @@ public class Order {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "city")
+    private String city;
+
     @Column(name = "phone")
     private String phone;
+
+    @Column(name = "state")
+    @Enumerated(EnumType.STRING)
+    private OrderStateEnum state;
 
     @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<OrderItem> items;

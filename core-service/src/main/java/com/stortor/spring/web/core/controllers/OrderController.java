@@ -1,6 +1,7 @@
 package com.stortor.spring.web.core.controllers;
 
 
+import com.stortor.spring.web.api.exceptions.ResourceNotFoundException;
 import com.stortor.spring.web.core.converters.OrderConverter;
 import com.stortor.spring.web.api.core.OrderDetailsDto;
 import com.stortor.spring.web.api.core.OrderDto;
@@ -59,5 +60,10 @@ public class OrderController {
     public List<OrderDto> getCurrentUserOrders(@RequestHeader String username) {
         return orderService.findOrdersByUsername(username).stream()
                 .map(orderConverter::entityToDto).collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}")
+    public OrderDto getOrderById(@PathVariable Long id) {
+        return orderConverter.entityToDto(orderService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Заказ не найден")));
     }
 }

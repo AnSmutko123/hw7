@@ -15,11 +15,9 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class AppConfig {
-    @Value("${integrations.core-service.url}")
-    private String cartServiceUrl;
 
     @Bean
-    public WebClient cartServiceWebClient() {
+    public WebClient coreServiceWebClient() {
         TcpClient tcpClient = TcpClient
                 .create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 2000)
@@ -30,7 +28,7 @@ public class AppConfig {
 
         return WebClient
                 .builder()
-                .baseUrl(cartServiceUrl)
+                .baseUrl("http://localhost:5555/core")
                 .clientConnector(new ReactorClientHttpConnector(HttpClient.from(tcpClient)))
                 .build();
     }

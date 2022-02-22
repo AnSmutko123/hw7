@@ -56,19 +56,19 @@ public class CartService {
 
     public void addToCart(String cartKey, Long productId) {
         ProductDto productDto = productsServiceIntegration.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found, id = " + productId));
-        productDtoAnalyticsList.add(productDto);
+//        productDtoAnalyticsList.add(productDto);
         execute(cartKey, c -> {
             c.add(productDto);
         });
     }
 
     // 30 sec
-    @Scheduled(fixedRate = 30000)
-    public void addAnalyticsProductsToBd() {
-        log.info(new Date().toString());
-        analyticsProductsIntegration.sendToAnalytics(productDtoAnalyticsList);
-        productDtoAnalyticsList.clear();
-    }
+//    @Scheduled(fixedRate = 30000)
+//    public void addAnalyticsProductsToBd() {
+//        log.info(new Date().toString());
+//        analyticsProductsIntegration.sendToAnalytics(productDtoAnalyticsList);
+//        productDtoAnalyticsList.clear();
+//    }
 
     public void clearCart(String cartKey) {
         execute(cartKey, Cart::clear);

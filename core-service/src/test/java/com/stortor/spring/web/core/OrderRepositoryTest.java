@@ -45,7 +45,7 @@ public class OrderRepositoryTest {
         CartItemDto cartItemMilk = new CartItemDto(1L, "Milk", 3, BigDecimal.valueOf(60), BigDecimal.valueOf(180));
         CartDto cartDto = new CartDto(Arrays.asList(cartItemMilk), cartItemMilk.getPrice());
         String username = "Alice";
-        OrderDetailsDto orderDetailsDto = new OrderDetailsDto("Moscow", "111111");
+        OrderDetailsDto orderDetailsDto = new OrderDetailsDto("Moscow", "dsfsdf", "111111");
         Order order = new Order();
         List<OrderItem> items = new ArrayList<>(Arrays.asList(
                 new OrderItem(milk, order, cartItemMilk.getQuantity(), cartItemMilk.getPricePerProduct(), cartItemMilk.getPrice())));
