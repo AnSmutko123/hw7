@@ -16,7 +16,7 @@
             <td>{{order.totalPrice}}</td>
             <td>{{order.state}}</td>
             <td>
-                <button class="btn btn-primary" ng-click="goToPay(order.id)">Оплатить</button>
+                <button class="btn btn-primary" ng-click="goToPay(order.id)" ng-show="order.state != 'PAID'">Оплатить</button>
             </td>
         </tr>
         </tbody>
