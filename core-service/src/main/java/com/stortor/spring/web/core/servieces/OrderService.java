@@ -8,6 +8,7 @@ import com.stortor.spring.web.core.converters.ProductConverter;
 import com.stortor.spring.web.core.entity.Order;
 import com.stortor.spring.web.core.entity.OrderItem;
 import com.stortor.spring.web.core.entity.Product;
+import com.stortor.spring.web.core.enums.OrderStateEnum;
 import com.stortor.spring.web.core.integrations.AnalyticsProductsIntegration;
 import com.stortor.spring.web.core.integrations.CartServiceIntegration;
 import com.stortor.spring.web.core.repositories.OrderRepository;
@@ -16,8 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -31,11 +34,11 @@ public class OrderService {
     private final AnalyticsProductsIntegration analyticsProductsIntegration;
     private final ProductConverter productConverter;
 
-
     public void createOrder(String username, OrderDetailsDto orderDetailsDto) {
         CartDto currentCartDto = cartServiceIntegration.getUserCart(username);
         Order order = new Order();
         order.setAddress(orderDetailsDto.getAddress());
+        order.setCity(orderDetailsDto.getCity());
         order.setPhone(orderDetailsDto.getPhone());
         order.setUsername(username);
         order.setTotalPrice(currentCartDto.getTotalPrice());
@@ -52,13 +55,29 @@ public class OrderService {
                     productDtoList.add(productConverter.entityToDto(product));
                     return item;
                 }).collect(Collectors.toList());
-        analyticsProductsIntegration.sendToAnalytics(productDtoList);
+//        analyticsProductsIntegration.sendToAnalytics(productDtoList);
         order.setItems(items);
+        order.setState(OrderStateEnum.CREATED);
         orderRepository.save(order);
         cartServiceIntegration.clearUserCart(username);
+    }
+
+    @Transactional
+    public void updateOrderState(Order order, OrderStateEnum stateEnum) {
+        order.setState(stateEnum);
+        orderRepository.save(order);
     }
 
     public List<Order> findOrdersByUsername(String username) {
         return orderRepository.findAllByUsername(username);
     }
+
+    public Optional<Order> findById(Long orderId) {
+        return orderRepository.findById(orderId);
+    }
+
+    public Optional<Order> findByIdCreated(Long orderId) {
+        return orderRepository.findByIdAndState_Created(orderId);
+    }
 }
+

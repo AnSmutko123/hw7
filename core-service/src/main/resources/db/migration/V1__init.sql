@@ -12,7 +12,7 @@ create table products
 (
     id          bigserial primary key,
     title       varchar(255),
-    price       numeric (8,2),
+    price       numeric(8, 2),
     category_id bigint not null references categories (id),
     created_at  timestamp default current_timestamp,
     updated_at  timestamp default current_timestamp
@@ -45,15 +45,23 @@ values ('Milk', 70.00, 1),
        ('Oil', 90.00, 1),
        ('Onion', 40.00, 3);
 
+drop table order_state if exists cascade;
+create table order_state
+(
+    id    bigserial primary key,
+    title varchar(255) not null
+);
 
 drop table orders if exists cascade;
 create table orders
 (
     id          bigserial primary key,
-    username    varchar(255) not null,
-    total_price numeric (8,2)      not null,
+    username    varchar(255)  not null,
+    total_price numeric(8, 2) not null,
     address     varchar(255),
+    city        varchar(255),
     phone       varchar(255),
+    state       enum('PAID', 'CREATED', 'CANCELED', 'DELIVERED'),
     created_at  timestamp default current_timestamp,
     updated_at  timestamp default current_timestamp
 );
@@ -66,11 +74,11 @@ create table order_items
     category_id       bigint references categories (id),
     order_id          bigint references orders (id),
     quantity          integer,
-    price_per_product numeric (8,2),
-    price             numeric (8,2),
+    price_per_product numeric(8, 2),
+    price             numeric(8, 2),
     created_at        timestamp default current_timestamp,
     updated_at        timestamp default current_timestamp
 );
 
-insert into orders (username, total_price, address, phone)
-values ('user1', 200.00, 'address', '46545');
+insert into orders (username, total_price, address, city, phone, state)
+values ('user1', 200.00, 'address', 'Moscow', '46545', 'CREATED');

@@ -24,19 +24,43 @@ public class OrderDto {
     @Schema(description = "Адрес доставки", required = true, example = "Moscow")
     private String address;
 
+    @Schema(description = "Город доставки", required = true, example = "Moscow")
+    private String city;
+
     @Schema(description = "Номер телефона", required = true, example = "7878565464")
     private String phone;
+
+    @Schema(description = "Статус заказа", required = true, example = "PAID")
+    private String state;
 
     public OrderDto() {
     }
 
-    public OrderDto(Long id, String username, List<OrderItemDto> items, BigDecimal totalPrice, String address, String phone) {
+    public OrderDto(Long id, String username, List<OrderItemDto> items, BigDecimal totalPrice, String address, String city, String phone, String state) {
         this.id = id;
         this.username = username;
         this.items = items;
         this.totalPrice = totalPrice;
         this.address = address;
+        this.city = city;
         this.phone = phone;
+        this.state = state;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public Long getId() {
