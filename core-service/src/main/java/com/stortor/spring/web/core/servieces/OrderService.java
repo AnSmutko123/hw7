@@ -55,7 +55,7 @@ public class OrderService {
                     productDtoList.add(productConverter.entityToDto(product));
                     return item;
                 }).collect(Collectors.toList());
-//        analyticsProductsIntegration.sendToAnalytics(productDtoList);
+        analyticsProductsIntegration.sendToAnalytics(productDtoList);
         order.setItems(items);
         order.setState(OrderStateEnum.CREATED);
         orderRepository.save(order);

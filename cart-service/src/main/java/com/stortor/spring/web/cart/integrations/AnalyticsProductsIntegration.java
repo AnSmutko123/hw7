@@ -24,8 +24,7 @@ public class AnalyticsProductsIntegration {
                 .uri("/api/v1/products_analytics")
                 .syncBody(productAnalyticsDto)
                 .retrieve()
-                .bodyToMono(List.class)
-                .block();
+                .bodyToMono(List.class);
     }
 
 }
