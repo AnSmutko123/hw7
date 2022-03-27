@@ -8,6 +8,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,47 +21,43 @@ import reactor.netty.tcp.TcpClient;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-@RequiredArgsConstructor
-@EnableConfigurationProperties(
-        {AnalyticsServiceIntegrationPropertiesUrl.class, AnalyticsServiceIntegrationPropertiesTimeout.class,
-                CoreServiceIntegrationPropertiesTimeout.class, CoreServiceIntegrationPropertiesUrl.class}
-)
 public class AppConfig {
-
-    private final AnalyticsServiceIntegrationPropertiesUrl analyticsServiceUrl;
-    private final AnalyticsServiceIntegrationPropertiesTimeout analyticsServiceTimeout;
-    private final CoreServiceIntegrationPropertiesUrl cartServiceUrl;
-    private final CoreServiceIntegrationPropertiesTimeout coreServiceTimeout;
+    @Value("${integrations.core-service.url}")
+    private String coreServiceUrl;
 
     @Bean
     public WebClient coreServiceWebClient() {
         TcpClient tcpClient = TcpClient
                 .create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, coreServiceTimeout.getConnection())
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 2000)
                 .doOnConnected(connection -> {
-                    connection.addHandlerLast(new ReadTimeoutHandler(coreServiceTimeout.getRead(), TimeUnit.MILLISECONDS));
-                    connection.addHandlerLast(new WriteTimeoutHandler(coreServiceTimeout.getWrite(), TimeUnit.MILLISECONDS));
+                    connection.addHandlerLast(new ReadTimeoutHandler(10000, TimeUnit.MILLISECONDS));
+                    connection.addHandlerLast(new WriteTimeoutHandler(2000, TimeUnit.MILLISECONDS));
                 });
 
         return WebClient
                 .builder()
-                .baseUrl(cartServiceUrl.getUrl())
+                .baseUrl(coreServiceUrl)
                 .clientConnector(new ReactorClientHttpConnector(HttpClient.from(tcpClient)))
                 .build();
     }
+
+    @Value("${integrations.analytics-service.url}")
+    private String analyticsProductsServiceUrl;
 
     @Bean
     public WebClient analyticsProductsServiceWebClient() {
         TcpClient tcpClient = TcpClient
                 .create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, analyticsServiceTimeout.getConnection())
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 2000)
                 .doOnConnected(connection -> {
-                    connection.addHandlerLast(new ReadTimeoutHandler(analyticsServiceTimeout.getRead(), TimeUnit.MILLISECONDS));
-                    connection.addHandlerLast(new WriteTimeoutHandler(analyticsServiceTimeout.getWrite(), TimeUnit.MILLISECONDS));
+                    connection.addHandlerLast(new ReadTimeoutHandler(10000, TimeUnit.MILLISECONDS));
+                    connection.addHandlerLast(new WriteTimeoutHandler(2000, TimeUnit.MILLISECONDS));
                 });
+
         return WebClient
                 .builder()
-                .baseUrl(analyticsServiceUrl.getUrl())
+                .baseUrl(analyticsProductsServiceUrl)
                 .clientConnector(new ReactorClientHttpConnector(HttpClient.from(tcpClient)))
                 .build();
     }

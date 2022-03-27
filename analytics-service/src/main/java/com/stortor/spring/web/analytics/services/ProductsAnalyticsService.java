@@ -27,6 +27,7 @@ public class ProductsAnalyticsService {
     public void addToCartProducts(List<ProductAnalyticsDto> analyticsProductDto) {
         List<ProductsAnalytics> productsAnalytics = analyticsProductDto.stream().map(p -> converter.dtoToEntity(p)).collect(Collectors.toList());
         analyticsList.addAll(productsAnalytics);
+        log.info(analyticsList.toString());
     }
 
     @Transactional

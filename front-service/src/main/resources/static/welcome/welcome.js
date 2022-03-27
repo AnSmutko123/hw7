@@ -3,7 +3,7 @@ angular.module('market-front').controller('welcomeController', function ($scope,
 
     $scope.loadTheMostAddedProductsPerDay = function () {
         $http({
-            url: 'http://localhost:5555/analytics/api/v1/products_analytics/added',
+            url: 'http://localhost:8133/api/v1/products_analytics/added',
             method: 'GET'
         }).then(function (response) {
             $scope.productsAddedPerDay = response.data;
@@ -12,7 +12,7 @@ angular.module('market-front').controller('welcomeController', function ($scope,
 
     $scope.loadTheMostBoughtProductsPerMonth = function () {
         $http({
-            url: 'http://localhost:5555/analytics/api/v1/products_analytics/bought',
+            url: 'http://localhost:8133/api/v1/products_analytics/bought',
             method: 'GET'
         }).then(function (response) {
             $scope.productsBoughtPerMonth = response.data;

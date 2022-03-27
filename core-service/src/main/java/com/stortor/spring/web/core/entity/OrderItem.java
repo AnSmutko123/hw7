@@ -53,4 +53,45 @@ public class OrderItem {
         this.pricePerProduct = pricePerProduct;
         this.price = price;
     }
+
+    public static OrderItemBuilder builder() {
+        return new OrderItemBuilder();
+    }
+
+    public static class OrderItemBuilder {
+        private Product product;
+        private Order order;
+        private Integer quantity;
+        private BigDecimal pricePerProduct;
+        private BigDecimal price;
+
+        public OrderItemBuilder setProduct(Product product) {
+            this.product = product;
+            return this;
+        }
+
+        public OrderItemBuilder setOrder(Order order) {
+            this.order = order;
+            return this;
+        }
+
+        public OrderItemBuilder setQuantity(Integer quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public OrderItemBuilder setPricePerProduct(BigDecimal pricePerProduct) {
+            this.pricePerProduct = pricePerProduct;
+            return this;
+        }
+
+        public OrderItemBuilder setPrice(BigDecimal price) {
+            this.price = price;
+            return this;
+        }
+
+        public OrderItem build() {
+            return new OrderItem(product, order, quantity, pricePerProduct, price);
+        }
+    }
 }

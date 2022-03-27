@@ -4,6 +4,7 @@ import com.stortor.spring.web.core.enums.OrderStateEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -57,4 +58,69 @@ public class Order {
         this.address = address;
         this.phone = phone;
     }
+
+    public Order(String username, BigDecimal totalPrice, String address, String city, String phone, OrderStateEnum state, List<OrderItem> items) {
+        this.username = username;
+        this.totalPrice = totalPrice;
+        this.address = address;
+        this.city = city;
+        this.phone = phone;
+        this.state = state;
+        this.items = items;
+    }
+
+    public static OrderEntityBuilder builder() {
+        return new OrderEntityBuilder();
+    }
+
+    public static class OrderEntityBuilder {
+        private String username;
+        private BigDecimal totalPrice;
+        private String address;
+        private String city;
+        private String phone;
+        private OrderStateEnum state;
+        private List<OrderItem> items;
+
+        public OrderEntityBuilder setUsername(final String username) {
+            this.username = username;
+            return this;
+        }
+
+        public OrderEntityBuilder setTotalPrice(BigDecimal totalPrice) {
+            this.totalPrice = totalPrice;
+            return this;
+        }
+
+        public OrderEntityBuilder setAddress(String address) {
+            this.address = address;
+            return this;
+        }
+
+        public OrderEntityBuilder setCity(String city) {
+            this.city = city;
+            return this;
+        }
+
+        public OrderEntityBuilder setPhone(String phone) {
+            this.phone = phone;
+            return this;
+        }
+
+        public OrderEntityBuilder setState(OrderStateEnum state) {
+            this.state = state;
+            return this;
+        }
+
+        public OrderEntityBuilder setItems(List<OrderItem> items) {
+            this.items = items;
+            return this;
+        }
+
+        public Order build() {
+            return new Order(username, totalPrice, address, city, phone, state, items);
+        }
+    }
+
+
 }

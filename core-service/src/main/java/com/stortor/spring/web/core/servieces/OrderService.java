@@ -14,6 +14,7 @@ import com.stortor.spring.web.core.integrations.CartServiceIntegration;
 import com.stortor.spring.web.core.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
 
@@ -36,28 +37,32 @@ public class OrderService {
 
     public void createOrder(String username, OrderDetailsDto orderDetailsDto) {
         CartDto currentCartDto = cartServiceIntegration.getUserCart(username);
-        Order order = new Order();
-        order.setAddress(orderDetailsDto.getAddress());
-        order.setCity(orderDetailsDto.getCity());
-        order.setPhone(orderDetailsDto.getPhone());
-        order.setUsername(username);
-        order.setTotalPrice(currentCartDto.getTotalPrice());
+        Order order = Order.builder()
+                .setAddress(orderDetailsDto.getAddress())
+                .setPhone(orderDetailsDto.getPhone())
+                .setCity(orderDetailsDto.getCity())
+                .setState(OrderStateEnum.CREATED)
+                .setTotalPrice(currentCartDto.getTotalPrice())
+                .setUsername(username)
+                .build();
+
         List<ProductDto> productDtoList = new ArrayList<>();
         List<OrderItem> items = currentCartDto.getItems().stream()
                 .map(orderItemDto -> {
                     Product product = productService.findById(orderItemDto.getProductId()).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
-                    OrderItem item = new OrderItem();
-                    item.setOrder(order);
-                    item.setQuantity(orderItemDto.getQuantity());
-                    item.setPricePerProduct(orderItemDto.getPricePerProduct());
-                    item.setPrice(orderItemDto.getPrice());
-                    item.setProduct(product);
+                    OrderItem item = OrderItem.builder()
+                            .setOrder(order)
+                            .setQuantity(orderItemDto.getQuantity())
+                            .setPricePerProduct(orderItemDto.getPricePerProduct())
+                            .setPrice(orderItemDto.getPrice())
+                            .setProduct(product)
+                            .build();
                     productDtoList.add(productConverter.entityToDto(product));
                     return item;
                 }).collect(Collectors.toList());
-        analyticsProductsIntegration.sendToAnalytics(productDtoList);
+
         order.setItems(items);
-        order.setState(OrderStateEnum.CREATED);
+//        analyticsProductsIntegration.sendToAnalytics(productDtoList);
         orderRepository.save(order);
         cartServiceIntegration.clearUserCart(username);
     }

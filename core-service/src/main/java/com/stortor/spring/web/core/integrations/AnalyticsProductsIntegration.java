@@ -24,6 +24,7 @@ public class AnalyticsProductsIntegration {
                 .retrieve()
                 .bodyToMono(List.class)
                 .block();
+
     }
 
 }
