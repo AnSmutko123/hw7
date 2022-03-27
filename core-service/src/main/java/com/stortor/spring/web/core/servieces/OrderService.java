@@ -38,12 +38,12 @@ public class OrderService {
     public void createOrder(String username, OrderDetailsDto orderDetailsDto) {
         CartDto currentCartDto = cartServiceIntegration.getUserCart(username);
         Order order = Order.builder()
-                .setAddress(orderDetailsDto.getAddress())
-                .setPhone(orderDetailsDto.getPhone())
-                .setCity(orderDetailsDto.getCity())
-                .setState(OrderStateEnum.CREATED)
-                .setTotalPrice(currentCartDto.getTotalPrice())
-                .setUsername(username)
+                .address(orderDetailsDto.getAddress())
+                .phone(orderDetailsDto.getPhone())
+                .city(orderDetailsDto.getCity())
+                .state(OrderStateEnum.CREATED)
+                .totalPrice(currentCartDto.getTotalPrice())
+                .username(username)
                 .build();
 
         List<ProductDto> productDtoList = new ArrayList<>();

@@ -2,6 +2,7 @@ package com.stortor.spring.web.core.entity;
 
 import com.stortor.spring.web.core.enums.OrderStateEnum;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.aspectj.weaver.ast.Or;
@@ -17,6 +18,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "orders")
 public class Order {
     @Id
@@ -68,59 +70,5 @@ public class Order {
         this.state = state;
         this.items = items;
     }
-
-    public static OrderEntityBuilder builder() {
-        return new OrderEntityBuilder();
-    }
-
-    public static class OrderEntityBuilder {
-        private String username;
-        private BigDecimal totalPrice;
-        private String address;
-        private String city;
-        private String phone;
-        private OrderStateEnum state;
-        private List<OrderItem> items;
-
-        public OrderEntityBuilder setUsername(final String username) {
-            this.username = username;
-            return this;
-        }
-
-        public OrderEntityBuilder setTotalPrice(BigDecimal totalPrice) {
-            this.totalPrice = totalPrice;
-            return this;
-        }
-
-        public OrderEntityBuilder setAddress(String address) {
-            this.address = address;
-            return this;
-        }
-
-        public OrderEntityBuilder setCity(String city) {
-            this.city = city;
-            return this;
-        }
-
-        public OrderEntityBuilder setPhone(String phone) {
-            this.phone = phone;
-            return this;
-        }
-
-        public OrderEntityBuilder setState(OrderStateEnum state) {
-            this.state = state;
-            return this;
-        }
-
-        public OrderEntityBuilder setItems(List<OrderItem> items) {
-            this.items = items;
-            return this;
-        }
-
-        public Order build() {
-            return new Order(username, totalPrice, address, city, phone, state, items);
-        }
-    }
-
 
 }
