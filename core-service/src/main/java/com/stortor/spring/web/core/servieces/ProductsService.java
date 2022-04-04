@@ -4,12 +4,12 @@ import com.stortor.spring.web.api.exceptions.ResourceNotFoundException;
 import com.stortor.spring.web.core.converters.ProductConverter;
 import com.stortor.spring.web.api.core.ProductDto;
 import com.stortor.spring.web.core.entity.Product;
+import com.stortor.spring.web.core.proxy.CachedProductRepository;
 import com.stortor.spring.web.core.repositories.ProductRepository;
 import com.stortor.spring.web.core.repositories.specification.ProductSpecifications;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ import java.util.Optional;
 public class ProductsService {
 
     private final ProductConverter converter;
-    private final ProductRepository productRepository;
+    private final ProductRepository productRepository = new CachedProductRepository();
 
     public Page<Product> findAll(Integer minPrice, Integer maxPrice, String titlePart, String titlePartCategory, Integer page) {
         Specification<Product> spec = Specification.where(null);
