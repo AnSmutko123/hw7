@@ -46,7 +46,7 @@ public class ProductsService {
         productRepository.deleteById(id);
     }
 
-    public Optional<Product> findById(Long id) {
+    public Optional<Product> findById(Long id) { // много запросов
         return productRepository.findById(id);
     }
 
