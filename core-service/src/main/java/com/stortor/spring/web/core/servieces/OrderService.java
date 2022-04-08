@@ -4,17 +4,22 @@ import com.stortor.spring.web.api.carts.CartDto;
 import com.stortor.spring.web.api.core.ProductDto;
 import com.stortor.spring.web.api.exceptions.ResourceNotFoundException;
 import com.stortor.spring.web.api.core.OrderDetailsDto;
+import com.stortor.spring.web.core.SpringWebApplication;
 import com.stortor.spring.web.core.converters.ProductConverter;
 import com.stortor.spring.web.core.entity.Order;
 import com.stortor.spring.web.core.entity.OrderItem;
 import com.stortor.spring.web.core.entity.Product;
 import com.stortor.spring.web.core.enums.OrderStateEnum;
+import com.stortor.spring.web.core.events.CreateOrderEvents;
 import com.stortor.spring.web.core.integrations.AnalyticsProductsIntegration;
 import com.stortor.spring.web.core.integrations.CartServiceIntegration;
 import com.stortor.spring.web.core.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Or;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 
 
@@ -34,37 +39,11 @@ public class OrderService {
     private final CartServiceIntegration cartServiceIntegration;
     private final AnalyticsProductsIntegration analyticsProductsIntegration;
     private final ProductConverter productConverter;
+    private final ApplicationContext applicationContext;
 
-    public void createOrder(String username, OrderDetailsDto orderDetailsDto) {
-        CartDto currentCartDto = cartServiceIntegration.getUserCart(username);
-        Order order = Order.builder()
-                .address(orderDetailsDto.getAddress())
-                .phone(orderDetailsDto.getPhone())
-                .city(orderDetailsDto.getCity())
-                .state(OrderStateEnum.CREATED)
-                .totalPrice(currentCartDto.getTotalPrice())
-                .username(username)
-                .build();
-
-        List<ProductDto> productDtoList = new ArrayList<>();
-        List<OrderItem> items = currentCartDto.getItems().stream()
-                .map(orderItemDto -> {
-                    Product product = productService.findById(orderItemDto.getProductId()).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
-                    OrderItem item = OrderItem.builder()
-                            .setOrder(order)
-                            .setQuantity(orderItemDto.getQuantity())
-                            .setPricePerProduct(orderItemDto.getPricePerProduct())
-                            .setPrice(orderItemDto.getPrice())
-                            .setProduct(product)
-                            .build();
-                    productDtoList.add(productConverter.entityToDto(product));
-                    return item;
-                }).collect(Collectors.toList());
-
-        order.setItems(items);
-//        analyticsProductsIntegration.sendToAnalytics(productDtoList);
-        orderRepository.save(order);
-        cartServiceIntegration.clearUserCart(username);
+    public void createOrderEvent(String username, OrderDetailsDto orderDetailsDto) {
+        CreateOrderEvents createOrderEvents = new CreateOrderEvents(username, orderDetailsDto);
+        applicationContext.publishEvent(createOrderEvents);
     }
 
     @Transactional
