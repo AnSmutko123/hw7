@@ -44,7 +44,7 @@ public class OrderController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createOrder(@RequestHeader String username, @RequestBody OrderDetailsDto orderDetailsDto) {
         orderValidator.validate(orderDetailsDto);
-        orderService.createOrder(username, orderDetailsDto);
+        orderService.createOrderEvent(username, orderDetailsDto);
     }
 
     @GetMapping()
