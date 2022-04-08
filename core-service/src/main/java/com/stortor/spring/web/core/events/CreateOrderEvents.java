@@ -10,21 +10,13 @@ import org.springframework.stereotype.Component;
 
 public class CreateOrderEvents extends ApplicationEvent {
 
-    private final OrderRepository orderRepository;
-    private final ProductsService productService;
-    private final CartServiceIntegration cartServiceIntegration;
-    private final ProductConverter productConverter;
-    private final String username;
-    private final OrderDetailsDto orderDetailsDto;
+    private String username;
+    private OrderDetailsDto orderDetailsDto;
 
-    public CreateOrderEvents(String username, OrderDetailsDto orderDetailsDto, OrderRepository orderRepository, ProductsService productService, CartServiceIntegration cartServiceIntegration, ProductConverter productConverter) {
-        super(orderRepository);
+    public CreateOrderEvents(String username, OrderDetailsDto orderDetailsDto) {
+        super(username);
         this.username = username;
         this.orderDetailsDto = orderDetailsDto;
-        this.orderRepository = orderRepository;
-        this.productService = productService;
-        this.cartServiceIntegration = cartServiceIntegration;
-        this.productConverter = productConverter;
     }
 
     public String getUsername() {
@@ -35,19 +27,4 @@ public class CreateOrderEvents extends ApplicationEvent {
         return orderDetailsDto;
     }
 
-    public OrderRepository getOrderRepository() {
-        return orderRepository;
-    }
-
-    public ProductsService getProductService() {
-        return productService;
-    }
-
-    public CartServiceIntegration getCartServiceIntegration() {
-        return cartServiceIntegration;
-    }
-
-    public ProductConverter getProductConverter() {
-        return productConverter;
-    }
 }

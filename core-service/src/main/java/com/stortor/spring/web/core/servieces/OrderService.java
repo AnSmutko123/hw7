@@ -42,7 +42,7 @@ public class OrderService {
     private final ApplicationContext applicationContext;
 
     public void createOrderEvent(String username, OrderDetailsDto orderDetailsDto) {
-        CreateOrderEvents createOrderEvents = new CreateOrderEvents(username, orderDetailsDto, orderRepository, productService, cartServiceIntegration, productConverter);
+        CreateOrderEvents createOrderEvents = new CreateOrderEvents(username, orderDetailsDto);
         applicationContext.publishEvent(createOrderEvents);
     }
 
