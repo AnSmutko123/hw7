@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
     private final ProductsService productService;
-    private final ProductConverter productConverter;
     private final ProductValidator productValidator;
 
     @Operation(
@@ -50,7 +49,7 @@ public class ProductController {
             page = 1;
         }
         return productService.findAll(minPrice, maxPrice, titlePart, titlePartCategory, page)
-                .map(p -> productConverter.entityToDto(p));
+                .map(p -> ProductConverter.INSTANCE.entityToDto(p));
     }
 
     @GetMapping("/{id}")
@@ -72,7 +71,7 @@ public class ProductController {
     ) {
         Product product = productService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id));
-        return productConverter.entityToDto(product);
+        return ProductConverter.INSTANCE.entityToDto(product);
     }
 
     @DeleteMapping("/{id}")
@@ -103,8 +102,8 @@ public class ProductController {
     public ProductDto addNewProduct(@RequestBody ProductDto productDto) {
         productDto.setId(null);
         productValidator.validate(productDto);
-        Product product = productConverter.dtoToEntity(productDto);
-        return productConverter.entityToDto(productService.save(product));
+        Product product = ProductConverter.INSTANCE.dtoToEntity(productDto);
+        return ProductConverter.INSTANCE.entityToDto(productService.save(product));
     }
 
     @PutMapping()
@@ -120,7 +119,7 @@ public class ProductController {
     public ProductDto updateProduct(@RequestBody ProductDto productDto) {
         productValidator.validate(productDto);
         Product product = productService.update(productDto);
-        return productConverter.entityToDto(product);
+        return ProductConverter.INSTANCE.entityToDto(product);
     }
 
     @PatchMapping("/change_price")
@@ -139,7 +138,7 @@ public class ProductController {
     ) {
         Product product = productService.changePrice(productId, delta);
         productValidator.validatePrice(product);
-        return productConverter.entityToDto(product);
+        return ProductConverter.INSTANCE.entityToDto(product);
     }
 
 }
