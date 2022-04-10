@@ -33,7 +33,6 @@ public class OrderService {
     private final ProductsService productService;
     private final CartServiceIntegration cartServiceIntegration;
     private final AnalyticsProductsIntegration analyticsProductsIntegration;
-    private final ProductConverter productConverter;
 
     public void createOrder(String username, OrderDetailsDto orderDetailsDto) {
         CartDto currentCartDto = cartServiceIntegration.getUserCart(username);
@@ -57,7 +56,7 @@ public class OrderService {
                             .setPrice(orderItemDto.getPrice())
                             .setProduct(product)
                             .build();
-                    productDtoList.add(productConverter.entityToDto(product));
+                    productDtoList.add(ProductConverter.INSTANCE.entityToDto(product));
                     return item;
                 }).collect(Collectors.toList());
 

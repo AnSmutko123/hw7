@@ -22,7 +22,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProductsService {
 
-    private final ProductConverter converter;
     private final ProductRepository productRepository;
 
     public Page<Product> findAll(Integer minPrice, Integer maxPrice, String titlePart, String titlePartCategory, Integer page) {
@@ -51,7 +50,7 @@ public class ProductsService {
     }
 
     public ProductDto findProductDtoById(Long id) {
-        return converter.entityToDto(findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id)));
+        return ProductConverter.INSTANCE.entityToDto((findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id))));
     }
 
     public Product save(Product product) {
